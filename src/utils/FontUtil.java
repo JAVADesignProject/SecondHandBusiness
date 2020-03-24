@@ -7,14 +7,7 @@ public class FontUtil {
 
     static
     {
-        if (OSUtil.getOsType() == OSUtil.Windows)
-        {
             font = new Font("微软雅黑", Font.PLAIN, 14);
-        }
-        else
-        {
-            font = new Font("PingFang SC", Font.PLAIN, 14);
-        }
     }
 
     public static Font getDefaultFont()
