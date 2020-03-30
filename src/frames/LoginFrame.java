@@ -11,8 +11,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class LoginFrame extends JFrame {
-    private static final int windowWidth = 300;
-    private static final int windowHeight = 400;
+    private static final int WINDOW_WIDTH = 300;
+    private static final int WINDOW_HEIGHT = 400;
 
     private JPanel editPanel;
     private MKTextField usernameField;
@@ -20,8 +20,6 @@ public class LoginFrame extends JFrame {
     private MKButton loginButton;
     private JLabel statusLabel;
     private JLabel titleLabel;
-
-    private static Point origin = new Point();
 
     private String username;
 
@@ -43,7 +41,7 @@ public class LoginFrame extends JFrame {
     }
 
     private void initComponents() {
-        Dimension windowSize = new Dimension(windowWidth, windowHeight);
+        Dimension windowSize = new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT);
         setResizable(false);                                                                                            //禁止窗体调整大小
         setSize(windowSize);                                                                                            //设置窗体尺寸
 
@@ -54,7 +52,6 @@ public class LoginFrame extends JFrame {
         //TODO 显示头像逻辑
 
         editPanel = new JPanel();                                                                                       //新建编辑区域面板
-        //editPanel.setBorder(new LineBorder(Colors.MAIN_COLOR_DARKER));                                                  //(原来没有这一句)
         editPanel.setBackground(Colors.WINDOW_BACKGROUND_LIGHT);
         editPanel.setLayout(new VerticalFlowLayout(VerticalFlowLayout.TOP, 0, 5, true, false));  //设置面板为自定义的垂直流布局
 
@@ -64,7 +61,7 @@ public class LoginFrame extends JFrame {
         usernameField.setPreferredSize(textFieldDimension);                                                             //设置文本框大小
         usernameField.setFont(FontUtil.getDefaultFont(16));                                                        //设置输入文字的字体大小
         usernameField.setForeground(Colors.FONT_BLACK);                                                                 //设置输入文字的字体颜色
-        usernameField.setMargin(new Insets(0, 15, 0, 0));                                        //设置文本与边框的距离
+        usernameField.setMargin(new Insets(0, 15, 0, 0));                                      //设置文本与边框的距离
         usernameField.setBorder(new MatteBorder(0, 0, 1, 0, Colors.DIALOG_BORDER));
 
         passwordField = new MKPasswordField();                                                                          //新建一个自定义的密码框
@@ -118,14 +115,12 @@ public class LoginFrame extends JFrame {
 
     private void centerScreen() {
         Toolkit tk = Toolkit.getDefaultToolkit();
-        this.setLocation((tk.getScreenSize().width - windowWidth) / 2,
-                (tk.getScreenSize().height - windowHeight) / 2);
+        this.setLocation((tk.getScreenSize().width - WINDOW_WIDTH) / 2,
+                (tk.getScreenSize().height - WINDOW_HEIGHT) / 2);
     }
 
     private void setListeners() {
-
         loginButton.addMouseListener(new AbstractMouseListener() {
-
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (loginButton.isEnabled()) {
@@ -136,18 +131,15 @@ public class LoginFrame extends JFrame {
         });
 
         KeyListener keyListener = new KeyListener() {
-
             @Override
             public void keyTyped(KeyEvent e) {
             }
-
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     doLogin();
                 }
             }
-
             @Override
             public void keyReleased(KeyEvent e) {
             }

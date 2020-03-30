@@ -2,13 +2,15 @@ package panels;
 
 import javax.swing.*;
 import components.Colors;
-import components.GBC;
 import components.MKButton;
+import frames.MainFrame;
+import frames.PostFrame;
 import listener.AbstractMouseListener;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class LeftPanel extends JPanel {
     private JLabel homeLabel;               //主页
@@ -20,16 +22,14 @@ public class LeftPanel extends JPanel {
     private ImageIcon homeIconNormal;
     private ImageIcon askIconActive;
     private ImageIcon askIconNormal;
-//    private ImageIcon postIconActive;
-//    private ImageIcon postIconNormal;
     private ImageIcon chatIconActive;
     private ImageIcon chatIconNormal;
     private ImageIcon meIconActive;
     private ImageIcon meIconNormal;
 
     public LeftPanel() {
-        this.initComponents();
-        this.initView();
+        initComponents();
+        initView();
     }
 
 
@@ -50,6 +50,7 @@ public class LeftPanel extends JPanel {
 
         //TODO 发布按钮
         postButton = new MKButton(null, Colors.MAIN_COLOR, Colors.MAIN_COLOR_DARKER, Colors.MAIN_COLOR_DARKER, new ImageIcon("res/image/add.png"));
+        postButton.addMouseListener(new MenuClickListener());
 
         chatIconActive = new ImageIcon("res/image/chat_active.png");
         chatIconNormal = new ImageIcon("res/image/chat_normal.png");
@@ -92,7 +93,14 @@ public class LeftPanel extends JPanel {
                 chatLabel.setIcon(chatIconNormal);
                 meLabel.setIcon(meIconNormal);
             } else if (e.getComponent() == postButton) {
-
+                MainFrame.context.setEnabled(false);
+                PostFrame frame = new PostFrame();
+                frame.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        MainFrame.context.setEnabled(true);
+                    }
+                });
             } else if (e.getComponent() == chatLabel) {
                 homeLabel.setIcon(homeIconNormal);
                 askLabel.setIcon(askIconNormal);
