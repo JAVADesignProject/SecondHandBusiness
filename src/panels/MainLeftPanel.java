@@ -12,10 +12,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class LeftPanel extends JPanel {
+public class MainLeftPanel extends JPanel {
     private JLabel homeLabel;               //主页
     private JLabel askLabel;                //求购
-    private MKButton postButton;               //发布
+    private MKButton postButton;            //发布
     private JLabel chatLabel;               //消息
     private JLabel meLabel;                 //我的
     private ImageIcon homeIconActive;
@@ -27,11 +27,11 @@ public class LeftPanel extends JPanel {
     private ImageIcon meIconActive;
     private ImageIcon meIconNormal;
 
-    public LeftPanel() {
+    public MainLeftPanel() {
         initComponents();
         initView();
+        MainRightPanel.getInstance().showHomePanel();
     }
-
 
     private void initComponents() {
         homeIconActive = new ImageIcon("res/image/home_active.png");
@@ -87,11 +87,13 @@ public class LeftPanel extends JPanel {
                 askLabel.setIcon(askIconNormal);
                 chatLabel.setIcon(chatIconNormal);
                 meLabel.setIcon(meIconNormal);
+                MainRightPanel.getInstance().showHomePanel();
             } else if (e.getComponent() == askLabel) {
                 homeLabel.setIcon(homeIconNormal);
                 askLabel.setIcon(askIconActive);
                 chatLabel.setIcon(chatIconNormal);
                 meLabel.setIcon(meIconNormal);
+                MainRightPanel.getInstance().showAskPanel();
             } else if (e.getComponent() == postButton) {
                 MainFrame.context.setEnabled(false);
                 PostFrame frame = new PostFrame();
@@ -106,11 +108,13 @@ public class LeftPanel extends JPanel {
                 askLabel.setIcon(askIconNormal);
                 chatLabel.setIcon(chatIconActive);
                 meLabel.setIcon(meIconNormal);
+                MainRightPanel.getInstance().showChatPanel();
             } else if (e.getComponent() == meLabel) {
                 homeLabel.setIcon(homeIconNormal);
                 askLabel.setIcon(askIconNormal);
                 chatLabel.setIcon(chatIconNormal);
                 meLabel.setIcon(meIconActive);
+                MainRightPanel.getInstance().showMePanel();
             }
         }
     }

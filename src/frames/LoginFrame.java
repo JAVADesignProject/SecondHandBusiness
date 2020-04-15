@@ -22,6 +22,7 @@ public class LoginFrame extends JFrame {
     private JLabel titleLabel;
 
     private String username;
+    private String password;
 
     public LoginFrame() {
 //        initService();
@@ -67,7 +68,6 @@ public class LoginFrame extends JFrame {
         passwordField = new MKPasswordField();                                                                          //新建一个自定义的密码框
         passwordField.setPlaceholder("密码");                                                                            //设置密码框内提示内容
         passwordField.setPreferredSize(textFieldDimension);                                                             //设置密码框大小
-//        passwordField.setBorder(new MKBorder(MKBorder.BOTTOM, Colors.RED));
         passwordField.setFont(FontUtil.getDefaultFont(16));                                                        //设置输入文字的字体大小
         passwordField.setForeground(Colors.FONT_BLACK);                                                                 //设置输入文字的字体颜色
         passwordField.setMargin(new Insets(0, 15, 0, 0));                                       //设置文本与边框的距离
@@ -157,6 +157,21 @@ public class LoginFrame extends JFrame {
         frame.setVisible(true);
 
         // TODO: 登录逻辑
+        username = usernameField.getText();
+        password = new String(passwordField.getPassword());
+
+        if (username == null || username.isBlank() || username.isEmpty()) {
+            showMessage("请输入用户名，注意字母大小写");
+        } else if (password == null || password.isBlank() || password.isEmpty()) {
+            showMessage("请输入密码");
+        }
+    }
+
+    private void showMessage(String message) {
+        if (!statusLabel.isVisible()) {
+            statusLabel.setVisible(true);
+        }
+        statusLabel.setText(message);
     }
 
 }

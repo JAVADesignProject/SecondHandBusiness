@@ -1,7 +1,7 @@
 package frames;
 
-import panels.LeftPanel;
-import panels.RightPanel;
+import panels.MainLeftPanel;
+import panels.MainRightPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,8 +10,8 @@ public class MainFrame extends JFrame {
     private static final int WINDOW_WIDTH = 900;
     private static final int WINDOW_HEIGHT = 650;
 
-    private LeftPanel leftPanel;
-    private RightPanel rightPanel;
+    private MainLeftPanel mainLeftPanel;
+    private MainRightPanel mainRightPanel;
 
     public static MainFrame context;
 
@@ -26,18 +26,22 @@ public class MainFrame extends JFrame {
 //        startWebSocket();
     }
 
+    public MainFrame getContext() {
+        return context;
+    }
+
     private void initComponents() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        leftPanel = new LeftPanel();
-        leftPanel.setPreferredSize(new Dimension(60, WINDOW_HEIGHT));
-        rightPanel = new RightPanel();
+        mainLeftPanel = new MainLeftPanel();
+        mainLeftPanel.setPreferredSize(new Dimension(60, WINDOW_HEIGHT));
+        mainRightPanel = MainRightPanel.getInstance();
     }
 
     private void initView() {
         setResizable(false);
         setSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
-        add(leftPanel, BorderLayout.WEST);
-        add(rightPanel, BorderLayout.CENTER);
+        add(mainLeftPanel, BorderLayout.WEST);
+        add(mainRightPanel, BorderLayout.CENTER);
     }
 
     private void centerScreen() {

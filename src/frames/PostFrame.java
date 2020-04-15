@@ -1,6 +1,7 @@
 package frames;
 
-import panels.PostPanel;
+import panels.PostLeftPanel;
+import panels.PostRightPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,24 +10,25 @@ public class PostFrame extends JFrame {
     private static final int WINDOW_WIDTH = 800;
     private static final int WINDOW_HEIGHT = 550;
 
-    private PostPanel postPanel;
+    private PostLeftPanel postLeftPanel;
+    private PostRightPanel postRightPanel;
 
     private static PostFrame context;
 
     public PostFrame() {
-        //super(MainFrame.context, "发布二手商品", true);
         context = this;
         initComponents();
         centerScreen();
         initView();
-
-
     }
 
     private void initComponents() {
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        postPanel = new PostPanel();
-
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        postLeftPanel = new PostLeftPanel();
+        postLeftPanel.setPreferredSize(new Dimension(150, WINDOW_HEIGHT));
+        postRightPanel = new PostRightPanel();
+//        postLeftPanel.setBorder(new LineBorder(Colors.MAIN_COLOR_DARKER));
+//        postRightPanel.setBorder(new LineBorder(Colors.MAIN_COLOR_DARKER));
     }
 
     private void initView() {
@@ -34,7 +36,8 @@ public class PostFrame extends JFrame {
         setTitle("发布二手商品");
         setResizable(false);
         setVisible(true);
-        add(postPanel);
+        add(postLeftPanel, BorderLayout.WEST);
+        add(postRightPanel,BorderLayout.CENTER);
         System.out.println("set");
     }
 

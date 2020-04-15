@@ -65,6 +65,13 @@ public class MKButton extends JButton {
         });
     }
 
+    public void setColor (Color normal, Color hover, Color press) {
+        this.BUTTON_COLOR1 = normal;
+        this.BUTTON_COLOR2 = hover;
+        this.BUTTON_COLOR3 = press;
+        this.borderColor = press;
+    }
+
     @Override
     protected void paintComponent(Graphics g)
     {

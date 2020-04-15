@@ -1,6 +1,7 @@
 package app;
 
 import frames.LoginFrame;
+import frames.MainFrame;
 
 import javax.swing.*;
 import java.io.File;
@@ -16,93 +17,72 @@ public class Launcher {
     public static String userHome;
     public static String appFilesBasePath;
 
-
-
     private JFrame currentFrame;
 
-    public Launcher()
-    {
+    public Launcher() {
         context = this;
     }
 
-    public void launch()
-    {
+    public void launch() {
         //获取系统环境变量
         config();
-
         //判断程序是否正在运行
-        if (!isApplicationRunning())
-        {
+        if (!isApplicationRunning()) {
             openFrame();
         }
-        else
-        {
+        else {
             System.exit(-1);
         }
     }
 
-    private void openFrame()
-    {
+    private void openFrame() {
         // 原来登录过
-        if (checkLoginInfo())
-        {
-//            currentFrame = new MainFrame();
+        if (checkLoginInfo()) {
+            currentFrame = new MainFrame();
         }
         // 从未登录过
-        else
-        {
+        else {
             currentFrame = new LoginFrame();
             currentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
         currentFrame.setVisible(true);
     }
 
-    private void config()
-    {
+    private void config() {
         userHome = System.getProperty("user.home");
         appFilesBasePath = userHome + System.getProperty("file.separator") + "wechat";
     }
 
-    private boolean checkLoginInfo()
-    {
+    private boolean checkLoginInfo() {
         // TODO 判断是否已登录的逻辑
         return false;
     }
 
-    private static boolean isApplicationRunning()
-    {
+    private static boolean isApplicationRunning() {
         boolean rv = false;
-        try
-        {
+        try {
             String path = appFilesBasePath + System.getProperty("file.separator") + "appLock";
             File dir = new File(path);
-            if (!dir.exists())
-            {
+            if (!dir.exists()) {
                 dir.mkdirs();
             }
-
             File lockFile = new File(path + System.getProperty("file.separator") + "appLaunch.lock");
-            if (!lockFile.exists())
-            {
+            if (!lockFile.exists()) {
                 lockFile.createNewFile();
             }
-
             //程序名称
             RandomAccessFile fis = new RandomAccessFile(lockFile.getAbsolutePath(), "rw");
             FileChannel fileChannel = fis.getChannel();
             FileLock fileLock = fileChannel.tryLock();
-            if (fileLock == null)
-            {
+            if (fileLock == null) {
                 System.out.println("程序已在运行.");
                 rv = true;
             }
         }
-        catch (FileNotFoundException e1)
-        {
+        catch (FileNotFoundException e1) {
             e1.printStackTrace();
         }
-        catch (IOException e)
-        {
+        catch (IOException e) {
             e.printStackTrace();
         }
         return rv;
