@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class Praser {
+public class Parser {
     public static <T> T fromJson(String json, Class<T> classOfT)throws JsonSyntaxException{
         return Primitives.wrap(classOfT).cast (new Gson().fromJson (json, classOfT));
     }
