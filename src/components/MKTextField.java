@@ -7,9 +7,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 
-
 public class MKTextField extends JTextField {
-
     private String placeholder;
 
     public MKTextField() {
@@ -17,7 +15,6 @@ public class MKTextField extends JTextField {
         setForeground(Colors.FONT_BLACK);
         setCaretColor(Color.GRAY);
         setBorder(null);
-
 
         getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -39,8 +36,7 @@ public class MKTextField extends JTextField {
     }
 
     @Override
-    protected void paintComponent(java.awt.Graphics g)
-    {
+    protected void paintComponent(java.awt.Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g ;
         if (getText().isEmpty()) {
@@ -53,8 +49,7 @@ public class MKTextField extends JTextField {
         }
     }
 
-    public String getPlaceholder()
-    {
+    public String getPlaceholder() {
         return placeholder;
     }
 

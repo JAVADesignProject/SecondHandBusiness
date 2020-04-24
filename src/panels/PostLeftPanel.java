@@ -35,22 +35,22 @@ public class PostLeftPanel extends JPanel {
 
         cautionLabel.setFont(FontUtil.getDefaultFont(16));
         cautionLabel.setForeground(Colors.FONT_GRAY_DARKER);
-        cautionLabel.setPreferredSize(new Dimension(200, 150));
+        cautionLabel.setPreferredSize(new Dimension(120, 150));
         cautionLabel.setText("<html>最多上传x张照片，照片大小不大于xxxMB，尺寸为aaa x bbb<html>");
-        //cautionLabel.setBorder(new LineBorder(Colors.MAIN_COLOR));
+        cautionLabel.setBorder(new LineBorder(Colors.MAIN_COLOR));
 
-        uploadPicButton = new MKButton("上传图片", Colors.MAIN_COLOR, Colors.MAIN_COLOR_DARKER, Colors.MAIN_COLOR_DARKER);
-        uploadPicButton.setFont(FontUtil.getDefaultFont(14));
-        uploadPicButton.setPreferredSize(new Dimension(40, 35));
+        uploadPicButton = new MKButton("上传图片", Colors.MAIN_COLOR,Colors.MAIN_COLOR_DARKER, Colors.MAIN_COLOR_DARKER);
+        uploadPicButton.setFont(FontUtil.getDefaultFont(18));
+        uploadPicButton.setPreferredSize(new Dimension(120, 35));
 
         finishButton = new MKButton("发 布", Colors.MAIN_COLOR, Colors.MAIN_COLOR_DARKER, Colors.MAIN_COLOR_DARKER);
         finishButton.setFont(FontUtil.getDefaultFont(18));
-        finishButton.setPreferredSize(new Dimension(40, 35));
+        finishButton.setPreferredSize(new Dimension(120, 35));
 
     }
 
     private void initView() {
-        setLayout(new VerticalFlowLayout(VerticalFlowLayout.TOP, 30, 30, true, false));
+        setLayout(new VerticalFlowLayout(VerticalFlowLayout.TOP, 15, 30, false, false));
         setBackground(Colors.WINDOW_BACKGROUND);
 
         add(nameLabel);

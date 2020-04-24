@@ -20,6 +20,7 @@ public class LoginFrame extends JFrame {
     private MKButton loginButton;
     private JLabel statusLabel;
     private JLabel titleLabel;
+    //private JLabel signupLabel;
 
     private String username;
     private String password;

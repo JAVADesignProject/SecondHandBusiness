@@ -46,7 +46,7 @@ public class PostRightPanel extends JPanel {
         field.setPlaceholder("");
         field.setPreferredSize(textFieldDimension);
         field.setBackground(Colors.WINDOW_BACKGROUND_LIGHT);
-        field.setFont(FontUtil.getDefaultFont(16));
+        field.setFont(FontUtil.getDefaultFont(18));
         field.setForeground(Colors.FONT_BLACK);
         field.setMargin(new Insets(0, 15, 0, 0));
     }

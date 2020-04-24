@@ -46,7 +46,7 @@ public class MKTextArea extends JTextArea {
                 g2.setBackground(Color.gray);
                 g2.setFont(FontUtil.getDefaultFont());
                 g2.setColor(Color.GRAY);
-                g2.drawString(placeholder, 1, 27);
+                g2.drawString(placeholder, 5, 15);
                 g2.dispose();
             }
         }
