@@ -13,7 +13,7 @@ public class PostFrame extends JFrame {
     private PostLeftPanel postLeftPanel;
     private PostRightPanel postRightPanel;
 
-    private static PostFrame context;
+    public static PostFrame context;
 
     public PostFrame() {
         context = this;

@@ -5,16 +5,16 @@ import java.sql.*;
 public class Database {
 
     private static Database instance;
-    private String DATABASE = "jdbc:mysql://localhost:3306/trade?severTimezone=GMT%2B8";
-    private String USERNAME = "root";
-    private String PASSWORD = "12345678";
+    private final String DATABASE = "jdbc:mysql://localhost:3306/trade?severTimezone=GMT%2B8";
+    private final String USERNAME = "root";
+    private final String PASSWORD = "12345678";
 
     public static Database getInstance(){
         return instance;
     }
 
-    private Connection conn;
-    private Statement stat;
+    private final Connection conn;
+    private final Statement stat;
 
     public Database() throws SQLException {
         instance=this;

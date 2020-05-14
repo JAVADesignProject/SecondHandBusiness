@@ -7,9 +7,9 @@ import java.net.Socket;
  * 建立与服务器的连接并获取信息，返回结果大于等于0为成功，否则为失败
  */
 public class MKPost {
-    private int token = Integer.MAX_VALUE;
+    private final int token = Integer.MAX_VALUE;
     private static MKPost instance;
-    private MKSocket socket;
+    private final MKSocket socket;
 
     public static MKPost getInstance() {
         return instance;

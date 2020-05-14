@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class IconUtil {
-    private static Map<String, ImageIcon> iconCache = new HashMap<>();
+    private static final Map<String, ImageIcon> iconCache = new HashMap<>();
 
 
     public static ImageIcon getIcon(Object context, String path)

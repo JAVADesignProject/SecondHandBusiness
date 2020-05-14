@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class KSocket {
-    private Socket socket;
-    private DataInputStream reader;
-    private DataOutputStream writer;
+    private final Socket socket;
+    private final DataInputStream reader;
+    private final DataOutputStream writer;
 
     public KSocket(Socket socket) throws IOException {
         this.socket = socket;

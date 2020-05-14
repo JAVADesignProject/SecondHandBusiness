@@ -8,8 +8,8 @@ public class MKBorder implements Border {
     public static final int BOTTOM = 1;
     public static final int LEFT = 2;
     public static final int RIGHT = 3;
-    private int orientation;
-    private Color color;
+    private final int orientation;
+    private final Color color;
     private float heightScale = 1.0F;
 
     public MKBorder(int orientation)

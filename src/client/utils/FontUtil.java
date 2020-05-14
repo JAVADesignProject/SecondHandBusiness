@@ -3,7 +3,7 @@ package client.utils;
 import java.awt.*;
 
 public class FontUtil {
-    private static Font font;
+    private static final Font font;
 
     static
     {

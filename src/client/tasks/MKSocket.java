@@ -9,9 +9,9 @@ import java.net.Socket;
  * 对socket进行封装
  */
 public class MKSocket {
-    private Socket socket;
-    private DataInputStream reader;
-    private DataOutputStream writer;
+    private final Socket socket;
+    private final DataInputStream reader;
+    private final DataOutputStream writer;
 
     public MKSocket(Socket socket) throws IOException {
         this.socket = socket;

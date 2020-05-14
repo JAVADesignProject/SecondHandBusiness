@@ -3,11 +3,16 @@ package client.panels;
 import client.components.Colors;
 import client.components.MKButton;
 import client.components.VerticalFlowLayout;
+import client.frames.PostFrame;
+import client.listener.AbstractMouseListener;
 import client.utils.FontUtil;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.io.File;
 
 public class PostLeftPanel extends JPanel {
 
@@ -17,10 +22,13 @@ public class PostLeftPanel extends JPanel {
     private JLabel cautionLabel;
     private MKButton uploadPicButton;
     private MKButton finishButton;
+    private JFileChooser chooser;
+    private File picture;
 
     public PostLeftPanel() {
         initComponents();
         initView();
+        setListener();
     }
 
     private void initComponents() {
@@ -36,8 +44,8 @@ public class PostLeftPanel extends JPanel {
         cautionLabel.setFont(FontUtil.getDefaultFont(16));
         cautionLabel.setForeground(Colors.FONT_GRAY_DARKER);
         cautionLabel.setPreferredSize(new Dimension(120, 150));
-        cautionLabel.setText("<html>最多上传x张照片，照片大小不大于xxxMB，尺寸为aaa x bbb<html>");
-        cautionLabel.setBorder(new LineBorder(Colors.MAIN_COLOR));
+        cautionLabel.setText("<html>最多上传1张照片，照片大小不大于5MB，尺寸为aaa x bbb<html>");
+        //cautionLabel.setBorder(new LineBorder(Colors.MAIN_COLOR));
 
         uploadPicButton = new MKButton("上传图片", Colors.MAIN_COLOR,Colors.MAIN_COLOR_DARKER, Colors.MAIN_COLOR_DARKER);
         uploadPicButton.setFont(FontUtil.getDefaultFont(18));
@@ -60,4 +68,23 @@ public class PostLeftPanel extends JPanel {
         add(cautionLabel);
         add(finishButton);
     }
+
+    private void setListener() {
+        uploadPicButton.addMouseListener(new AbstractMouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                chooser = new JFileChooser();
+                chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                chooser.setMultiSelectionEnabled(false);
+                chooser.setFileFilter(new FileNameExtensionFilter("image(*.jpg, *.png)", "jpg", "png"));
+                int result = chooser.showOpenDialog(PostFrame.context);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    picture = chooser.getSelectedFile();
+                }
+            }
+        });
+
+
+    }
+
 }
