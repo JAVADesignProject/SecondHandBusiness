@@ -21,4 +21,6 @@ public class KClass {
     public static final int DELETE_PRODUCTION = 10;//删除商品
     public static final int AUCTION_PRODUCTION_BUY = 11;//购买拍卖商品
     public static final int MY_PRODUCTION = 12;//我的商品
+    public static final int GET_COMMENT = 13;//获取评论
+    public static final int ADD_COMMENT = 14;//添加评论
 }

@@ -3,9 +3,11 @@ package sever.handler.info;
 import base.KClass;
 import base.Message;
 import base.Parser;
+import base.json.CommentJson;
 import base.json.MessageJson;
 import base.json.ProductionJson;
 import base.json.UserJson;
+import sever.api.KComment;
 import sever.api.KMessage;
 import sever.api.KProduction;
 import sever.api.KUser;
@@ -63,6 +65,12 @@ public class InfoMessageHandler extends MessageHandler {
                 break;
             case KClass.MY_PRODUCTION:
                 result = new Message(0,0,Parser.toJson (KProduction.getMyProduction (UserJson.parse (message.props).userid)));
+                break;
+            case KClass.ADD_COMMENT:
+                result  = KComment.addComment (CommentJson.parse (message.props));
+                break;
+            case KClass.GET_COMMENT:
+                result = new Message (0,0,Parser.toJson (KComment.getComment (ProductionJson.parse (message.props).production_id)));
                 break;
 
         }

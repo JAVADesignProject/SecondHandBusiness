@@ -5,7 +5,7 @@ import java.sql.*;
 public class Database {
 
     private static Database instance;
-    private final String DATABASE = "jdbc:mysql://localhost:3306/trade?severTimezone=GMT%2B8";
+    private final String DATABASE = "jdbc:mysql://localhost:3306/trade?serverTimezone=GMT%2B8";
     private final String USERNAME = "root";
     private final String PASSWORD = "001225";
 
