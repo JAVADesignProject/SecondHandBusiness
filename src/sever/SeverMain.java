@@ -1,7 +1,7 @@
 package sever;
 
 import sever.base.Database;
-import sever.base.KSeverManager;
+import sever.base.KServerManager;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -11,7 +11,7 @@ public class SeverMain {
         System.out.println ("服务器已启动" );
         try {
             var database = new Database ();
-            var severManager = new KSeverManager ();
+            var severManager = new KServerManager();
         } catch (SQLException e) {
             e.printStackTrace ( );
         } catch (IOException e) {

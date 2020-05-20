@@ -15,7 +15,6 @@ public class ProductionJson extends Json {
     public int auction_max_price;//拍卖最高价格
     public String max_price_user_id;//出价最高人的id
 
-
     public static ProductionJson parse(String json){
         return Parser.fromJson (json, ProductionJson.class);
     }

@@ -13,9 +13,6 @@ import sever.api.KProduction;
 import sever.api.KUser;
 import sever.base.MessageHandler;
 
-import javax.print.attribute.PrintJobAttributeSet;
-import java.sql.SQLException;
-
 public class InfoMessageHandler extends MessageHandler {
 
     private int token = Integer.MIN_VALUE;
@@ -28,14 +25,15 @@ public class InfoMessageHandler extends MessageHandler {
     public Message handleMessage(Message message) {
         Message result = null;
         switch (message.code) {
-            //登录
             case KClass.LOGIN:
                 result = KUser.login (UserJson.parse (message.props));
                 token = result.token;
                 break;
-            //注册
             case KClass.REGISTER:
                 result = KUser.register (UserJson.parse (message.props));
+                break;
+            case KClass.UPDATE_PASSWORD:
+                result = KUser.changePassword(UserJson.parse (message.props));
                 break;
             case KClass.ADD_PRODUCTION:
                 result = KProduction.addProduction (ProductionJson.parse (message.props));
@@ -58,7 +56,7 @@ public class InfoMessageHandler extends MessageHandler {
                 result = new Message (0, 0, production == null ?"":production.toString ());
                 break;
             case KClass.CHAT_MSG:
-                result = KMessage.getMessage (token, MessageJson.parse (message.props));
+                result = KMessage.getMessage(token, MessageJson.parse(message.props));
                 break;
             case KClass.SEARCH:
                 result = new Message (0,0,Parser.toJson (KProduction.search (message.props)));

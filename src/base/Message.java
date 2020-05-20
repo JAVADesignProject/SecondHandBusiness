@@ -29,7 +29,7 @@ public class Message {
         return Parser.toJson (this);
     }
 
-    public static Message prase(String json){
+    public static Message parse(String json){
         return Parser.fromJson (json,Message.class);
     }
 }

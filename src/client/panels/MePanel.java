@@ -6,6 +6,7 @@ import client.components.VerticalFlowLayout;
 import client.frames.AboutFrame;
 import client.frames.ChangePasswordFrame;
 import client.listener.AbstractMouseListener;
+import client.tasks.CurrentUser;
 import client.utils.FontUtil;
 
 import javax.swing.*;
@@ -46,10 +47,10 @@ public class MePanel extends JPanel {
         ImageIcon sellIcon = new ImageIcon("res/image/sold.png");
         ImageIcon boughtIcon = new ImageIcon("res/image/bought.png");
 
-        welcomeLabel = new JLabel("<html>欢 迎<br>MIKE</html>");
-        collectionLabel = new JLabel("0" + "收藏",SwingConstants.CENTER);
-        followLabel = new JLabel("0" + "关注",SwingConstants.CENTER);
-        fanLabel = new JLabel("0" + "粉丝",SwingConstants.CENTER);
+        welcomeLabel = new JLabel("欢 迎 " + CurrentUser.username);
+        collectionLabel = new JLabel("0" + "我收藏的", SwingConstants.CENTER);
+        followLabel = new JLabel("0" + "我关注的", SwingConstants.CENTER);
+        fanLabel = new JLabel("0" + "我的粉丝", SwingConstants.CENTER);
         postLabel = new JLabel("我发布的", postIcon, SwingConstants.CENTER);
         sellLabel = new JLabel("我卖出的", sellIcon, SwingConstants.CENTER);
         boughtLabel = new JLabel("我买到的", boughtIcon, SwingConstants.CENTER);
@@ -121,7 +122,7 @@ public class MePanel extends JPanel {
         logoutButton.addMouseListener(new AbstractMouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                System.exit(0);
             }
         });
 

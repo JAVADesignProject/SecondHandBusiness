@@ -21,7 +21,7 @@ public class InfoClientHandler extends ClientHandler {
             try {
                 while(true){
                     //获取消息
-                    var request = Message.prase (client.readUTF ());
+                    var request = Message.parse(client.readUTF ());
                     //获取执行结果
                     var result = messageHandler.handleMessage (request);
                     //写入结果

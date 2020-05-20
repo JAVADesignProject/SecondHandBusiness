@@ -26,7 +26,7 @@ public class ChatClientHandler extends ClientHandler {
         new Thread(()->{
             try {
                 while (true){
-                    var message = Message.prase (client.readUTF ());
+                    var message = Message.parse(client.readUTF ());
                     messageHandler.handleMessage (message);
                 }
             } catch (IOException e) {

@@ -1,8 +1,13 @@
 package client.frames;
 
+import base.Parser;
+import base.json.Json;
 import client.components.*;
 import client.listener.AbstractMouseListener;
+import client.tasks.CurrentUser;
+import client.tasks.MKPost;
 import client.utils.FontUtil;
+import base.json.UserJson;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
@@ -152,30 +157,43 @@ public class LoginFrame extends JFrame {
     }
 
     private void doLogin() {
-
-        this.dispose();
-
-        MainFrame frame = new MainFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-
         // TODO: 登录逻辑
         username = usernameField.getText();
         password = new String(passwordField.getPassword());
-//        User user = new User(username,password);
-//        Gson gson = new Gson();
-//        String userJson = gson.toJson(user);
-//        System.out.println(userJson);
-
-//        if (username == null || username.isBlank() || username.isEmpty()) {
-//            showMessage("请输入用户名，注意字母大小写");
-//        } else if (password == null || password.isBlank() || password.isEmpty()) {
-//            showMessage("请输入密码");
-//        } else {
-//            Gson gson = new Gson();
-//            String userJson = gson.toJson(username);
-//        }
-
+        if (username == null || username.isEmpty() || username.isBlank() || username.length() != 12) {
+            showMessage("请输入学号");
+        } else if (password == null || password.isEmpty() || password.isBlank()) {
+            showMessage("请输入密码");
+        } else {
+            UserJson user = new UserJson();
+            if (Character.isDigit(username.charAt(0))) {
+                user.userid = username;
+                //System.out.println(user.userid);
+            } else {
+                user.username = username;
+                //System.out.println(user.username);
+            }
+            user.password = Parser.md5(password);
+            System.out.println(user.password);
+            //new Thread(()-> {
+                var result = MKPost.getInstance().login(user);
+                if (result.code == 0) {
+                    showMessage("登录成功，加载主界面");
+                    user = MKPost.getInstance().getUserInfo(username);
+                    CurrentUser.userid = user.userid;
+                    CurrentUser.username = user.username;
+                    CurrentUser.password = user.password;
+                    CurrentUser.status = user.status;
+                    MainFrame frame = new MainFrame();
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    frame.setVisible(true);
+                    //System.out.println(CurrentUser.username);
+                    dispose();
+                } else {
+                    showMessage("登录失败" + result.code);
+                }
+            //}).start();
+        }
     }
 
     private void showMessage(String message) {
@@ -185,14 +203,4 @@ public class LoginFrame extends JFrame {
         statusLabel.setText(message);
     }
 
-}
-
-class User {
-    public String username;
-    public String password;
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
 }

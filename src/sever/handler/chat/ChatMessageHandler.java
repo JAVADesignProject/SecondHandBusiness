@@ -3,7 +3,7 @@ package sever.handler.chat;
 import base.KClass;
 import base.Message;
 import base.json.MessageJson;
-import sever.base.KSeverManager;
+import sever.base.KServerManager;
 import sever.base.MessageHandler;
 
 public class ChatMessageHandler extends MessageHandler {
@@ -18,10 +18,10 @@ public class ChatMessageHandler extends MessageHandler {
         switch(message.code){
             case KClass.LOGIN:
                 var json = MessageJson.parse (message.props);
-                clientHandler.sendMessageToSever (json);
+                clientHandler.sendMessageToSever(json);
                 break;
             case KClass.USER_INFO:
-                clientHandler.setUserid (KSeverManager.getUserId (message.token));
+                clientHandler.setUserid (KServerManager.getUserId (message.token));
         }
         return null;
     }

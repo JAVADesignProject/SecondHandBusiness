@@ -8,7 +8,6 @@ import client.listener.AbstractMouseListener;
 import client.utils.FontUtil;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -23,9 +22,13 @@ public class PostLeftPanel extends JPanel {
     private MKButton uploadPicButton;
     private MKButton finishButton;
     private JFileChooser chooser;
-    private File picture;
+    public File picture;
+
+    public static PostLeftPanel context;
+
 
     public PostLeftPanel() {
+        context = this;
         initComponents();
         initView();
         setListener();
@@ -43,7 +46,7 @@ public class PostLeftPanel extends JPanel {
 
         cautionLabel.setFont(FontUtil.getDefaultFont(16));
         cautionLabel.setForeground(Colors.FONT_GRAY_DARKER);
-        cautionLabel.setPreferredSize(new Dimension(120, 150));
+        cautionLabel.setPreferredSize(new Dimension(120, 130));
         cautionLabel.setText("<html>最多上传1张照片，照片大小不大于5MB，尺寸为aaa x bbb<html>");
         //cautionLabel.setBorder(new LineBorder(Colors.MAIN_COLOR));
 
@@ -54,6 +57,8 @@ public class PostLeftPanel extends JPanel {
         finishButton = new MKButton("发 布", Colors.MAIN_COLOR, Colors.MAIN_COLOR_DARKER, Colors.MAIN_COLOR_DARKER);
         finishButton.setFont(FontUtil.getDefaultFont(18));
         finishButton.setPreferredSize(new Dimension(120, 35));
+
+
 
     }
 
@@ -84,7 +89,15 @@ public class PostLeftPanel extends JPanel {
             }
         });
 
-
+        finishButton.addMouseListener(new AbstractMouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                post();
+            }
+        });
     }
 
+    private void post() {
+        PostRightPanel.context.getProductionInfo();
+    }
 }

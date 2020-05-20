@@ -5,7 +5,7 @@ import base.Parser;
 import base.json.MessageJson;
 import base.json.UserJson;
 import sever.base.Database;
-import sever.base.KSeverManager;
+import sever.base.KServerManager;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -15,7 +15,7 @@ import java.util.List;
 public class KMessage {
     public static Message getNewChat(int token){
         try {
-            var userid = KSeverManager.getUserId (token);
+            var userid = KServerManager.getUserId (token);
             var sql = "SELECT sender FROM message WHERE receiver=? GROUP BY sender";
             var ps = Database.getInstance ().getConn ().prepareStatement (sql);
             ps.setString (1,userid);

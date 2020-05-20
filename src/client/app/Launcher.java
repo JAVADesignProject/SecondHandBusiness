@@ -2,6 +2,7 @@ package client.app;
 
 import client.frames.LoginFrame;
 import client.frames.MainFrame;
+import client.tasks.MKPost;
 
 import javax.swing.*;
 import java.io.File;
@@ -18,6 +19,14 @@ public class Launcher {
     public static String appFilesBasePath;
 
     private JFrame currentFrame;
+
+    static {
+        try {
+            new MKPost();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Launcher() {
         context = this;
