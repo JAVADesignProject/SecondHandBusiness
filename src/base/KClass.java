@@ -24,4 +24,46 @@ public class KClass {
     public static final int MY_PRODUCTION = 12;//我的商品
     public static final int GET_COMMENT = 13;//获取评论
     public static final int ADD_COMMENT = 14;//添加评论
+    public static final int MY_CHAT = 15;       // 我的班级
+
+    /**
+     * 缓存文件夹路径
+     * @return
+     */
+    private static String getCachePath() {
+        return System.getProperty("user.home") + "\\SecondHandBusiness";
+    }
+
+    /**
+     * 将文件图片缓存至此文件夹
+     * @return
+     */
+    public static String getFileCachePath() {
+        return getCachePath() + "\\cache";
+    }
+
+    public static String getFileCachePath(String fileId) {
+        return getFileCachePath() + "\\" + fileId;
+    }
+
+    /**
+     * 得到聊天记录保存文件夹
+     * @return
+     */
+    public static String getRecordPath() {
+        return getCachePath() + "\\record";
+    }
+
+    /**
+     * 得到聊天记录文件路径
+     * @param id 用户id或者班级id
+     * @return
+     */
+    public static String getRecordPath(String id) {
+        return getRecordPath() + "\\" + id;
+    }
+
+    public static String getRecordPath(String userid, String sender) {
+        return getRecordPath(userid) + "\\" + sender;
+    }
 }

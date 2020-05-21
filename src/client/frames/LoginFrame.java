@@ -1,7 +1,6 @@
 package client.frames;
 
 import base.Parser;
-import base.json.Json;
 import client.components.*;
 import client.listener.AbstractMouseListener;
 import client.tasks.CurrentUser;
@@ -168,7 +167,7 @@ public class LoginFrame extends JFrame {
             UserJson user = new UserJson();
             if (Character.isDigit(username.charAt(0))) {
                 user.userid = username;
-                //System.out.println(user.userid);
+                //System.out.println(user.userId);
             } else {
                 user.username = username;
                 //System.out.println(user.username);
@@ -180,7 +179,7 @@ public class LoginFrame extends JFrame {
                 if (result.code == 0) {
                     showMessage("登录成功，加载主界面");
                     user = MKPost.getInstance().getUserInfo(username);
-                    CurrentUser.userid = user.userid;
+                    CurrentUser.userId = user.userid;
                     CurrentUser.username = user.username;
                     CurrentUser.password = user.password;
                     CurrentUser.status = user.status;

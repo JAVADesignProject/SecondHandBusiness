@@ -12,7 +12,7 @@ import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.geom.GeneralPath;
 
-public class MKChatLabel extends JPanel {
+public class MKChatBubble extends JPanel {
     private final JTextPane textPane;
     private final boolean isLeft;
 
@@ -27,7 +27,7 @@ public class MKChatLabel extends JPanel {
         return testPane.getPreferredSize().height;
     }
 
-    public MKChatLabel(boolean isLeft) {
+    public MKChatBubble(boolean isLeft) {
         //setLayout(new BorderLayout());
         this.isLeft = isLeft;
         // 在绘制气泡时左偏移了10个像素，然后期望和边框距离6像素

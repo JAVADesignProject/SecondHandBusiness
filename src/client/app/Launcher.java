@@ -2,6 +2,8 @@ package client.app;
 
 import client.frames.LoginFrame;
 import client.frames.MainFrame;
+import client.tasks.MKChatClient;
+import client.tasks.MKFileClient;
 import client.tasks.MKPost;
 
 import javax.swing.*;
@@ -23,6 +25,8 @@ public class Launcher {
     static {
         try {
             new MKPost();
+            new MKChatClient();
+            new MKFileClient();
         } catch (IOException e) {
             e.printStackTrace();
         }

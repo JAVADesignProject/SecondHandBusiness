@@ -17,6 +17,7 @@ public class MKButton extends JButton {
 
     public static final Color BUTTON_FOREGROUND_COLOR = Color.WHITE;
     private boolean hover;
+    private boolean showCount = true;
 
     public MKButton()
     {
@@ -116,5 +117,14 @@ public class MKButton extends JButton {
         // g2d.drawRoundRect(1, 1, w - 4, h - 4, 3, 3);
         g2d.dispose();
         super.paintComponent(g);
+    }
+
+    public void setShowCount(boolean showCount) {
+        this.showCount = showCount;
+        getParent().repaint();
+    }
+
+    public boolean isShowCount() {
+        return showCount;
     }
 }

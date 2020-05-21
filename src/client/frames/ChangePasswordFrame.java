@@ -114,7 +114,7 @@ public class ChangePasswordFrame extends JDialog {
             new Thread(() -> {
                 confirmButton.setText("修改中...");
                 var user = new UserJson();
-                user.userid = CurrentUser.userid;
+                user.userid = CurrentUser.userId;
                 CurrentUser.password = Parser.md5(newPassword);
                 user.password = Parser.md5(newPassword);
                 user.username = CurrentUser.username;
@@ -133,7 +133,6 @@ public class ChangePasswordFrame extends JDialog {
         confirmButton.addMouseListener(new AbstractMouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //TODO 完成修改密码逻辑
                 changePassword();
             }
         });

@@ -2,10 +2,15 @@ package client.tasks;
 
 import base.KClass;
 import base.Message;
+import base.Parser;
+import base.json.MessageJson;
 import base.json.UserJson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 建立与服务器的连接并获取信息，返回结果大于等于0为成功，否则为失败
@@ -55,6 +60,18 @@ public class MKPost {
     public synchronized UserJson getUserInfo(UserJson user) {
         var result = post(new Message(KClass.USER_INFO, token, user.toString()));
         return result.code < 0 ? null : UserJson.parse(result.props);
+    }
+
+    public synchronized List<UserJson> getChatUser() {
+        var result = post(new Message(KClass.MY_CHAT, token, ""));
+        if (result.code < 0) return new ArrayList<>();
+        return Parser.fromJson(result.props, new TypeToken<List<UserJson>>() {}.getType());
+    }
+
+    public synchronized List<MessageJson> getMessage(MessageJson info) {
+        var result = post(new Message(KClass.CHAT_MSG, token, info.toString()));
+        if (result.code < 0) return new ArrayList<>();
+        return Parser.fromJson(result.props, new TypeToken<List<MessageJson>>() {}.getType());
     }
 
 

@@ -1,20 +1,29 @@
 package client.panels;
 
+import base.KClass;
+import base.json.MessageJson;
+import base.json.UserJson;
+import client.components.ChatBar;
 import client.components.Colors;
 import client.components.MKButton;
-import client.components.MKChatLabel;
+import client.components.MKChatBubble;
+import client.listener.MKListener;
+import client.tasks.CurrentUser;
+import client.tasks.MKChatClient;
+import client.tasks.MKFileClient;
+import client.tasks.MKPost;
 import client.utils.FontUtil;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.regex.Pattern;
 
-public class ChatPanel extends JPanel {
+public class ChatPanel extends JPanel implements MKListener {
     private final int width = 840;
     private final int paneHeight = 620;
     private final int groupWidth = 300;
@@ -33,30 +42,30 @@ public class ChatPanel extends JPanel {
     private JPanel centerPane;
     private JPanel groups;
     private JPanel chatTitleBar;
+    private List<ChatBar> chatBars = new ArrayList<>();
 
-     public ChatPanel(/*String userid, int token*/) {
+     public ChatPanel(/*String userId, int token*/) {
 //        mainStatus = new MainStatus();
-//        mainStatus.setUserId(userid);
+//        mainStatus.setUserId(userId);
 //        mainStatus.setToken(token);
 
         //setSize(width, height);
-        //Debug.out("基本框架加载");
+
         // 绘制基本框架
         initView();
-        //Debug.out("获取用户头像");
-        //Debug.out("班级列表加载");
+
         // 获取我的班级
         //getMyClass();
-        //Debug.out("获取新消息");
+
         // 获取有新消息的列表
         //getNewChatBar();
-        //Debug.out("读取聊天记录");
+
         // 读取本地聊天记录
         //addOldChat();
-        //Debug.out("聊天引擎加载");
-        //GChatClient.getInstance().register(mainStatus.getToken());
-        //GChatClient.getInstance().addMsgListener(this);
-        //Debug.out("加载完成.");
+
+        //MKChatClient.getInstance().register(mainStatus.getToken());
+        MKChatClient.getInstance().addMsgListener(this);
+
         // 绘制聊天条
         //showFrame();
     }
@@ -96,7 +105,7 @@ public class ChatPanel extends JPanel {
         add(centerPane, BorderLayout.CENTER);
     }
 
-    private void addChatBubble(MKChatLabel bubble, String sender) {
+    private void addChatBubble(MKChatBubble bubble, String sender) {
         JPanel panel = new JPanel(new FlowLayout(bubble.isLeft() ? FlowLayout.LEFT : FlowLayout.RIGHT));
         panel.setBorder(new EmptyBorder(10, 20, 10, 20));
 
@@ -173,8 +182,9 @@ public class ChatPanel extends JPanel {
 
         // 发送功能
         send.addActionListener(e-> {
-            //sendMessage(msgInput.getMessage());
+            sendMessage(msgInput.getText());
             msgInput.setText("");
+
         });
 
         send.setPreferredSize(new Dimension(100, 30));
@@ -223,10 +233,201 @@ public class ChatPanel extends JPanel {
 
 
 
+
+
+    /**
+     * 得到应该被加入到聊天栏中的聊天条
+     * @param user 用户信息
+     * @return 创建的聊天条
+     */
+    private ChatBar addAndGetChatBar(UserJson user) {
+        // 判断是否已经被添加
+        for (var i : chatBars) {
+            if (i.getId().equals(user.userid)) {
+                return i;
+            }
+        }
+        user = MKPost.getInstance().getUserInfo(user);
+        var chatBar = new ChatBar(user.userid, user.username, 0, 40, groupWidth, 70);
+        UserJson finalUser = user;
+        chatBar.addActionListener(e-> {
+            setChatPane(finalUser);
+            chatBar.showCount(false);
+        });
+        chatBars.add(chatBar);
+        groups.add(chatBar.getPane());
+        return chatBar;
+    }
+
+    void chatTo(UserJson user) {
+        if (user.userid.equals(CurrentUser.userId)) {
+            // 啥玩意啊，你还想整个跟自己的聊天啊
+            //Debug.log("Edge最帅");
+            System.out.println("不能跟自己聊天哦");
+        } else {
+            //toFront();
+            addAndGetChatBar(user).showCount(false);
+            setChatPane(user);
+            //switchCardPane(CHAT_CARD);
+        }
+    }
+
+    private void repaintChatBar() {
+        chatBars.sort((a, b) -> {
+            if (a.getType() == b.getType()) {
+                if (a.isShowCount() && b.isShowCount()) return 0;
+                else if (a.isShowCount()) return -1;
+                else return 1;
+            } else if (a.getType() > b.getType()) {
+                return -1;
+            } else {
+                return 1;
+            }
+        });
+        groups.removeAll();
+        for (var i : chatBars) {
+            groups.add(i.getPane());
+        }
+        groups.revalidate();
+        groups.repaint();
+    }
+
+    /**
+     * 在窗体加载时的新消息列表
+     */
+    private void getNewChatBar() {
+        var list = MKPost.getInstance().getChatUser();
+        if (list == null) {
+            return;
+        }
+        for (var userJson : list) {
+            String title = userJson.username;
+            final var chatBar = new ChatBar(userJson.userid, title, 0, 40, groupWidth, 70);
+            chatBar.addActionListener(e -> {
+                setChatPane(userJson);
+                chatBar.showCount(false);
+            });
+            chatBars.add(chatBar);
+            groups.add(chatBar.getPane());
+        }
+    }
+
+    /**
+     * 创建聊天气泡
+     * @param message 聊天内容
+     * @return 创建的聊天气泡
+     */
+    private MKChatBubble createChatBubble(MessageJson message) {
+        var bubble = new MKChatBubble(!message.sender.equals(CurrentUser.userId));
+        bubble.setBackground(new Color(bubble.isLeft() ? 0xECF0F1 : 0x5DADE2));
+        bubble.setForeground(new Color(bubble.isLeft() ? 0x424949 : 0xFFFFFF));
+        bubble.insertText(message.text);
+        return bubble;
+    }
+
+    /**
+     * 保存聊天记录
+     * @param id 用户或班级id
+     * @param list 聊天记录列表
+     */
+    private void saveRecord(String id, List<MessageJson> list) {
+        try {
+            MKFileClient.createDirs(KClass.getRecordPath(CurrentUser.userId));
+            var path = KClass.getRecordPath(CurrentUser.userId, id);
+            var file = new File(path);
+            if (!file.exists()) {
+                if (!file.createNewFile()) {
+                    System.out.println("聊天记录文件创建失败");
+                }
+            }
+            var fout = new FileOutputStream(file, true);
+            var writer = new PrintWriter(fout);
+            for (var i : list) {
+                writer.println(i.toString());
+            }
+            writer.close();
+            fout.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addChatBubble(List<MessageJson> list, boolean append) {
+        int maxChatCount = 10;
+        if (list.size() > maxChatCount && !append) {
+            list = list.subList(list.size() - maxChatCount - 1, list.size());
+        }
+        for (var i : list) {
+            addChatBubble(createChatBubble(i), MKPost.getInstance().getUserInfo(i.sender).username);
+        }
+    }
+
+    private List<String> getRecord(String id) {
+        try {
+            var path = KClass.getRecordPath(CurrentUser.userId, id);
+            var file = new File(path);
+            if (!file.exists()) {
+                return new ArrayList<>();
+            }
+            var fin = new FileInputStream(file);
+            var reader = new BufferedReader(new InputStreamReader(fin));
+            var line = "";
+            List<String> lines = new ArrayList<>();
+            while ((line = reader.readLine()) != null)   {
+                lines.add(line);
+            }
+            reader.close();
+            fin.close();
+            return lines;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    // 重新加载消息记录
+    private void reloadRecord(MessageJson message) {
+        // 先获取最新的消息记录
+        var list = MKPost.getInstance().getMessage(message);
+        var target = message.type == 0 ? message.sender : message.receiver;
+        if (list != null)
+            saveRecord(target, list);
+        removeChatBubble();
+        var lines = getRecord(target);
+
+        // 最多显示50条消息
+        List<MessageJson> msgList = new ArrayList<>();
+        for (var i : lines) {
+            var msg = MessageJson.parse(i);
+            msgList.add(msg);
+        }
+
+        // 将消息列表加入气泡
+        addChatBubble(msgList, false);
+    }
+
+    // 设置聊天面板内容
+    private void setChatPane(UserJson userJson) {
+        if (CurrentUser.userId.equals(userJson.userid))
+            return;
+//        if (!cardPane.isVisible())
+//            cardPane.setVisible(true);
+        chatTitle.setText(userJson.username);
+        chatTool.setVisible(false);
+        var msg = new MessageJson();
+        CurrentUser.targetId = userJson.userid;
+        //mainStatus.setClass(false);
+        msg.sender = userJson.userid;
+        msg.receiver = CurrentUser.userId;
+        msg.type = 0;
+        //switchCardPane(CHAT_CARD);
+        reloadRecord(msg);
+    }
+
     // 发送信息
-//    private void sendMessage(String msg) {
-//        new Thread(()-> {
-//            try {
+    private void sendMessage(String msg) {
+        new Thread(()-> {
+            try {
 //                var result = new StringBuffer();
 //                var m = Pattern.compile("(?<!\\\\)<([^<>]*)(?<!\\\\)>").matcher(msg);
 //                while (m.find()) {
@@ -236,16 +437,76 @@ public class ChatPanel extends JPanel {
 //                    m.appendReplacement(result, "<" + FileJson.parse(GFileClient.getInstance().upload(img).props).fileId + ">");
 //                }
 //                m.appendTail(result);
-//                var message = new MessageJson();
-//                message.type = mainStatus.isClass() ? 1 : 0;
-//                message.receiver = mainStatus.getTargetId();
-//                message.sender = mainStatus.getUserId();
-//                message.time = Calendar.getInstance().getTimeInMillis();
-//                message.text = result.toString();
-//                GChatClient.getInstance().sendMessage(message);
-//            } catch (Exception e) {
-//                new GMessageDialog(this, "消息发送失败（可能因为插入空图片等原因）", "Error");
-//            }
-//        }).start();
-//    }
+                var message = new MessageJson();
+                //message.type = mainStatus.isClass() ? 1 : 0;
+                message.receiver = "1000";
+                message.sender = CurrentUser.userId;
+                message.time = Calendar.getInstance().getTimeInMillis();
+                message.text = msg;
+                System.out.println(message.sender + "\n" + message.receiver + "\n" + message.time + "\n" + message.text);
+                MKChatClient.getInstance().sendMessage(message);
+            } catch (Exception e) {
+                //new GMessageDialog(this, "消息发送失败（可能因为插入空图片等原因）", "Error");
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    /**
+     * 获取旧聊天记录文件夹中的用户
+     * @return .
+     */
+    private List<String> getOldChatUser() {
+        List<String> files = new ArrayList<>();
+        File file = new File(KClass.getRecordPath(CurrentUser.userId));
+
+        File[] tempList = file.listFiles();
+        if (tempList == null) return null;
+        for (File aTempList : tempList) {
+            if (aTempList.isFile()) {
+                files.add(aTempList.getName());
+            }
+        }
+        return files;
+    }
+
+    /**
+     * 聊天记录加载到面板
+     */
+    private void addOldChat() {
+        var list = getOldChatUser();
+        if (list == null) return;
+        for(var u : list) {
+            var user = new UserJson();
+            user.userid = u;
+            user = MKPost.getInstance().getUserInfo(user);
+            if (user != null) addAndGetChatBar(user).showCount(false);
+        }
+    }
+
+    @Override
+    public void onReceiveMessage(MessageJson message) {
+        // 获取真正的接收者，如果发送者是自己那么接收者就是消息的接收者，否则是消息发送者
+        var receiver = CurrentUser.userId.equals(message.sender) ? message.receiver : message.sender;
+        var user = new UserJson();
+        user.userid = receiver;
+        var chatBar = addAndGetChatBar(MKPost.getInstance().getUserInfo(user));
+        var list = new ArrayList<MessageJson>();
+        list.add(message);
+        // 1.保存聊天记录
+        saveRecord(receiver, list);
+        // 判断当前聊天窗口是否是同一个
+        if (CurrentUser.targetId.equals(receiver)) {
+            // 当前正是和这条消息中的人聊天
+            // 把消息添加到当前聊天窗口
+            addChatBubble(list, true);
+            chatPane.revalidate();
+            Rectangle rect = new Rectangle(0,chatPane.getPreferredSize().height,10,10);
+            chatPane.scrollRectToVisible(rect);
+        } else {
+            // 添加新消息提示
+            chatBar.showCount(true);
+        }
+    }
+
 }

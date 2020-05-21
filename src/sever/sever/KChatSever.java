@@ -31,7 +31,6 @@ public class KChatSever extends KSever {
             try {
                 var handler = new ChatClientHandler (this,new KSocket (serverSocket.accept ()), new ChatMessageHandler ());
                 handler.start ();
-                ;
                 clients.add(handler);
             } catch (IOException e) {
                 e.printStackTrace ( );
