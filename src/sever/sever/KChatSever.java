@@ -46,15 +46,17 @@ public class KChatSever extends KSever {
     private void sendMessageToClient(String userid, MessageJson message){
         if(chatMap.containsKey (userid)){
             var receiver = chatMap.get (userid);
-            if(receiver == null) return;
+            if(receiver == null)
+                return;
             receiver.sendNewMessage (message);
-            KMessage.addMessage (message);
         }
     }
 
     public void sendMessage(MessageJson message){
         sendMessageToClient (message.sender,message);
         sendMessageToClient (message.receiver,message);
+        KMessage.addMessage (message);
+        System.out.println("插入信息");
     }
 
     public void logout(String userid){

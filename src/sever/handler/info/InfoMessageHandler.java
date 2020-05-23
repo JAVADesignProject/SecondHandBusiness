@@ -48,7 +48,7 @@ public class InfoMessageHandler extends MessageHandler {
                 result = KProduction.buyAuctionProduction (ProductionJson.parse (message.props));
                 break;
             case KClass.USER_INFO:
-                var user = KUser.getUserInfo (UserJson.parse (message.props).userid);
+                var user = KUser.getUserInfo (UserJson.parse (message.props).userID);
                 result = new Message (0, 0, user == null ? "" : user.toString ( ));
                 break;
             case KClass.PRODUCTION_INFO:
@@ -62,7 +62,7 @@ public class InfoMessageHandler extends MessageHandler {
                 result = new Message (0,0,Parser.toJson (KProduction.search (message.props)));
                 break;
             case KClass.MY_PRODUCTION:
-                result = new Message(0,0,Parser.toJson (KProduction.getMyProduction (UserJson.parse (message.props).userid)));
+                result = new Message(0,0,Parser.toJson (KProduction.getMyProduction (UserJson.parse (message.props).userID)));
                 break;
             case KClass.ADD_COMMENT:
                 result  = KComment.addComment (CommentJson.parse (message.props));
@@ -70,7 +70,9 @@ public class InfoMessageHandler extends MessageHandler {
             case KClass.GET_COMMENT:
                 result = new Message (0,0,Parser.toJson (KComment.getComment (ProductionJson.parse (message.props).production_id)));
                 break;
-
+            case KClass.MY_CHAT:
+                result = KMessage.getNewChat(UserJson.parse (message.props));
+                break;
         }
         return result;
     }

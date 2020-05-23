@@ -114,7 +114,7 @@ public class ChangePasswordFrame extends JDialog {
             new Thread(() -> {
                 confirmButton.setText("修改中...");
                 var user = new UserJson();
-                user.userid = CurrentUser.userId;
+                user.userID = CurrentUser.userId;
                 CurrentUser.password = Parser.md5(newPassword);
                 user.password = Parser.md5(newPassword);
                 user.username = CurrentUser.username;

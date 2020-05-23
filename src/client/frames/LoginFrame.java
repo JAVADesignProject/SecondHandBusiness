@@ -166,32 +166,28 @@ public class LoginFrame extends JFrame {
         } else {
             UserJson user = new UserJson();
             if (Character.isDigit(username.charAt(0))) {
-                user.userid = username;
-                //System.out.println(user.userId);
+                user.userID = username;
             } else {
                 user.username = username;
-                //System.out.println(user.username);
             }
             user.password = Parser.md5(password);
-            System.out.println(user.password);
-            //new Thread(()-> {
-                var result = MKPost.getInstance().login(user);
-                if (result.code == 0) {
-                    showMessage("登录成功，加载主界面");
-                    user = MKPost.getInstance().getUserInfo(username);
-                    CurrentUser.userId = user.userid;
-                    CurrentUser.username = user.username;
-                    CurrentUser.password = user.password;
-                    CurrentUser.status = user.status;
-                    MainFrame frame = new MainFrame();
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    frame.setVisible(true);
-                    //System.out.println(CurrentUser.username);
-                    dispose();
-                } else {
-                    showMessage("登录失败" + result.code);
-                }
-            //}).start();
+            var result = MKPost.getInstance().login(user);
+            if (result.code == 0) {
+                showMessage("登录成功，加载主界面");
+                user = MKPost.getInstance().getUserInfo(username);
+                CurrentUser.userId = user.userID;
+                CurrentUser.username = user.username;
+                CurrentUser.password = user.password;
+                CurrentUser.status = user.status;
+                CurrentUser.targetUsers = MKPost.getInstance().getChatUser(user);
+                System.out.println(CurrentUser.targetUsers);
+                MainFrame frame = new MainFrame();
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setVisible(true);
+                dispose();
+            } else {
+                showMessage("登录失败" + result.code);
+            }
         }
     }
 

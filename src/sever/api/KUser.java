@@ -11,12 +11,12 @@ public class KUser {
     public static Message login(UserJson user)  {
         try {
             if(checkAccount (user)){
-                setUserStatus (user.userid,1);
+                setUserStatus (user.userID,1);
                 var token = 0;
                 while(KSeverManager.containsToken(token)){
                     token =(int)(Math.random () * 1e5);
                 }
-                KSeverManager.addToken(token,user.userid);
+                KSeverManager.addToken(token,user.userID);
                 return new Message (0,token,"登录成功");
             }else{
                 return new Message (-1,Integer.MAX_VALUE,"登录失败");
@@ -30,7 +30,7 @@ public class KUser {
     private static boolean checkAccount(UserJson user)  throws SQLException{
         var sql = "SELECT id FROM user WHERE id=? AND password=?;";
         var ps = Database.getInstance ().getConn ().prepareStatement (sql);
-        ps.setString (1, String.valueOf (user.userid));
+        ps.setString (1, String.valueOf (user.userID));
         ps.setString (2, user.password);
         var rs = ps.executeQuery ();
         return rs.next ();
@@ -79,7 +79,7 @@ public class KUser {
             var rs = ps.executeQuery ();
             if(rs.next ()){
                 var user = new UserJson();
-                user.userid = userid;
+                user.userID = userid;
                 user.password = rs.getString ("password");
                 user.status = rs.getInt ("status");
                 user.username = rs.getString ("username");
@@ -93,14 +93,14 @@ public class KUser {
 
     public static Message register(UserJson user){
         try {
-            if(getUserInfo(user.userid)!=null){
+            if(getUserInfo(user.userID)!=null){
                 return new Message(-1,0,"学号已存在");
-            } else if (user.userid.length ( ) != 12) {
+            } else if (user.userID.length ( ) != 12) {
                 return new Message(-2,0,"学号错误");
             }
             var sql = "INSERT INTO user(id, password, username, status)VALUES(?,?,?,0);";
             var ps = Database.getInstance ().getConn ().prepareStatement (sql);
-            ps.setString (1,user.userid);
+            ps.setString (1,user.userID);
             ps.setString (2,user.password);
             ps.setString (3,user.username);
             ps.executeUpdate();
@@ -116,7 +116,7 @@ public class KUser {
             var sql = "UPDATE user SET password=? WHERE id=?;";
             var ps = Database.getInstance ().getConn ().prepareStatement (sql);
             ps.setString (1,user.password);
-            ps.setString (2,user.userid);
+            ps.setString (2,user.userID);
             ps.executeUpdate();
             return new Message (0,0,"密码修改成功");
         } catch (Exception e) {

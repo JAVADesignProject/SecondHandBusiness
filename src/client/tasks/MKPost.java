@@ -62,17 +62,17 @@ public class MKPost {
         return result.code < 0 ? null : UserJson.parse(result.props);
     }
 
-    public synchronized List<UserJson> getChatUser() {
-        var result = post(new Message(KClass.MY_CHAT, token, ""));
-        if (result.code < 0) return new ArrayList<>();
+    public synchronized List<UserJson> getChatUser(UserJson user) {
+        var result = post(new Message(KClass.MY_CHAT, token, user.toString()));
+        if (result.code < 0)
+            return new ArrayList<>();
         return Parser.fromJson(result.props, new TypeToken<List<UserJson>>() {}.getType());
     }
 
     public synchronized List<MessageJson> getMessage(MessageJson info) {
         var result = post(new Message(KClass.CHAT_MSG, token, info.toString()));
-        if (result.code < 0) return new ArrayList<>();
+        if (result.code < 0)
+            return new ArrayList<>();
         return Parser.fromJson(result.props, new TypeToken<List<MessageJson>>() {}.getType());
     }
-
-
 }

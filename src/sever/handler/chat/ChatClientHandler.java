@@ -5,6 +5,7 @@ import base.Message;
 import base.json.MessageJson;
 import sever.base.ClientHandler;
 import sever.base.KSever;
+import sever.sever.KChatSever;
 
 import java.io.IOException;
 
@@ -37,7 +38,7 @@ public class ChatClientHandler extends ClientHandler {
 
 
     public void sendMessageToSever(MessageJson json){
-
+        ((KChatSever)sever).sendMessage(json);
     }
 
     public void sendNewMessage(MessageJson message){
@@ -50,6 +51,6 @@ public class ChatClientHandler extends ClientHandler {
 
     public void setUserid(String props) {
         userid = props;
-
+        ((KChatSever)sever).register(userid, this);
     }
 }

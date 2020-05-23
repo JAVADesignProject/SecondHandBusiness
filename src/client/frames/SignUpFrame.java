@@ -130,7 +130,7 @@ public class SignUpFrame extends JFrame {
             new Thread(() -> {
                 confirmButton.setText("注册中...");
                 var user = new UserJson();
-                user.userid = userid;
+                user.userID = userid;
                 user.password = Parser.md5(password);
                 user.username = username;
                 var result = MKPost.getInstance().register(user);
