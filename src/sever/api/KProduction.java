@@ -4,6 +4,7 @@ import base.Message;
 import base.json.ProductionJson;
 import sever.base.Database;
 
+import java.sql.Blob;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -14,14 +15,17 @@ public class KProduction {
     //添加商品
     public static Message addProduction(ProductionJson json){
         try {
-            var sql = "INSERT INTO production (name, price,producer_id,produce_time,introduction,auction) VALUES ";
+            var sql = "INSERT INTO production (name, price, producer_id, post_time, introduction, auction, image) VALUES (?,?,?,?,?,?,?)";
             var ps = Database.getInstance ().getConn ().prepareStatement (sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString (1,json.name);
             ps.setInt (2,json.price);
             ps.setString (3,json.producer_id);
-            ps.setTimestamp (4,new Timestamp (json.produce_time));
+            ps.setTimestamp (4,new Timestamp (json.post_time));
             ps.setString (5,json.introduction);
             ps.setBoolean (6,json.auction);
+            Blob blob =  Database.getInstance().getConn().createBlob();
+            blob.setBytes(1, json.pic);
+            ps.setBlob(7, blob);
             ps.executeUpdate ();
             var rs= ps.getGeneratedKeys ();
             int proid = 0;
@@ -84,7 +88,7 @@ public class KProduction {
     //搜索商品
     public static List<ProductionJson> search(String keyword){
         try {
-            var sql = "SELECT * FROM production WHERE name LIKE ? OR introduction LIKE ? ORDER BY produce_time";
+            var sql = "SELECT * FROM production WHERE name LIKE ? OR introduction LIKE ? ORDER BY post_time";
             var ps = Database.getInstance ().getConn ().prepareStatement (sql);
             ps.setString (1,keyword);
             ps.setString (2,keyword);
@@ -102,7 +106,7 @@ public class KProduction {
                 pro.max_price_user_id = rs.getString ("max_price_user_id");
                 pro.bought = rs.getBoolean ("bought");
                 pro.buyer_id = rs.getString ("buyer_id");
-                pro.produce_time = rs.getTimestamp ("produce_tiem").getTime ();
+                pro.post_time = rs.getTimestamp ("produce_tiem").getTime ();
                 list.add (pro);
             }
             return list;
@@ -131,7 +135,7 @@ public class KProduction {
                 pro.max_price_user_id = rs.getString ("max_price_user_id");
                 pro.bought = rs.getBoolean ("bought");
                 pro.buyer_id = rs.getString ("buyer_id");
-                pro.produce_time = rs.getTimestamp ("produce_time").getTime ();
+                pro.post_time = rs.getTimestamp ("post_time").getTime ();
             }
             return pro;
         } catch (SQLException e) {
@@ -159,7 +163,7 @@ public class KProduction {
                 pro.max_price_user_id = rs.getString ("max_price_user_id");
                 pro.bought = rs.getBoolean ("bought");
                 pro.buyer_id = rs.getString ("buyer_id");
-                pro.produce_time = rs.getTimestamp ("produce_time").getTime ();
+                pro.post_time = rs.getTimestamp ("post_time").getTime ();
                 list.add (pro);
             }
             return list;

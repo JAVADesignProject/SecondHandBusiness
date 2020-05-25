@@ -4,17 +4,20 @@ import base.json.ProductionJson;
 import client.components.*;
 import client.listener.AbstractMouseListener;
 import client.tasks.CurrentUser;
+import client.tasks.MKPost;
 import client.utils.FontUtil;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.io.File;
+import java.io.*;
+import java.util.Arrays;
+import java.util.Base64;
 
 public class PostFrame extends JFrame {
     private static final int WINDOW_WIDTH = 800;
-    private static final int WINDOW_HEIGHT = 550;
+    private static final int WINDOW_HEIGHT = 650;
     private static final int TEXT_FIELD_WIDTH = 200;
     private static final int TEXT_FIELD_HEIGHT = 30;
 
@@ -149,15 +152,15 @@ public class PostFrame extends JFrame {
                 chooser = new JFileChooser();
                 chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 chooser.setMultiSelectionEnabled(false);
-                chooser.setFileFilter(new FileNameExtensionFilter("image(*.jpg, *.png)", "jpg", "png"));
+                chooser.setFileFilter(new FileNameExtensionFilter("image(*.jpg, *.png)", "jpg", "png", "jpeg"));
                 int result = chooser.showOpenDialog(PostFrame.context);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     picture = chooser.getSelectedFile();
                     previewPicIcon = new ImageIcon(picture.getPath());
-                    previewPicIcon.setImage(previewPicIcon.getImage().getScaledInstance(192, 108, Image.SCALE_FAST));
+                    previewPicIcon.setImage(previewPicIcon.getImage().getScaledInstance(384, 216, Image.SCALE_DEFAULT));
                     previewPicLabel = new JLabel(previewPicIcon);
                     postRightPanel.add(previewPicLabel);
-                    System.out.println(picture.getPath());
+                    postRightPanel.updateUI();
                 }
             }
         });
@@ -172,10 +175,26 @@ public class PostFrame extends JFrame {
 
     private void post() {
         ProductionJson production = new ProductionJson();
+        byte[] buffer = new byte[(int)picture.length()];
+        try {
+            FileInputStream inputStream = new FileInputStream(picture);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            while (inputStream.read(buffer) != -1) {
+                outputStream.write(buffer, 0, (int)picture.length());
+            }
+            inputStream.close();
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         production.price = Integer.parseInt(priceField.getText());
         production.name = nameField.getText();
         production.introduction = descriptionArea.getText();
         production.producer_id = CurrentUser.userId;
         production.auction = auctionCheckBox.isSelected();
+        production.post_time = System.currentTimeMillis();
+        production.pic = buffer;
+        MKPost.getInstance().addProduction(production);
     }
 }

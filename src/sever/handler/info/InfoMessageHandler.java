@@ -73,6 +73,7 @@ public class InfoMessageHandler extends MessageHandler {
             case KClass.MY_CHAT:
                 result = KMessage.getNewChat(UserJson.parse (message.props));
                 break;
+
         }
         return result;
     }

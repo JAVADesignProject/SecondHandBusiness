@@ -4,6 +4,7 @@ import base.KClass;
 import base.Message;
 import base.Parser;
 import base.json.MessageJson;
+import base.json.ProductionJson;
 import base.json.UserJson;
 import com.google.gson.reflect.TypeToken;
 
@@ -74,5 +75,9 @@ public class MKPost {
         if (result.code < 0)
             return new ArrayList<>();
         return Parser.fromJson(result.props, new TypeToken<List<MessageJson>>() {}.getType());
+    }
+
+    public synchronized Message addProduction(ProductionJson production) {
+        return post(new Message(KClass.ADD_PRODUCTION, token, production.toString()));
     }
 }
