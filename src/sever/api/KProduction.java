@@ -4,6 +4,8 @@ import base.Message;
 import base.json.ProductionJson;
 import sever.base.Database;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -42,7 +44,7 @@ public class KProduction {
     //购买普通商品
     public static Message buyNormalProduction(ProductionJson json){
         try {
-            var  sql = "UPDATE production SET buyer_id=? WHERE production_id=?";
+            var  sql = "UPDATE production SET buyer_id=? WHERE id=?";
             var ps = Database.getInstance ().getConn ().prepareStatement (sql);
             ps.setString (1,json.buyer_id);
             ps.setInt (2,json.production_id);
@@ -57,7 +59,7 @@ public class KProduction {
     //竞拍商品
     public static Message buyAuctionProduction(ProductionJson json){
         try {
-            var sql = "UPDATE production SET aution_max_price=?, max_price_user_id=? WHERE production_id=?";
+            var sql = "UPDATE production SET auction_max_price=?, max_price_user_id=? WHERE id=?";
             var ps = Database.getInstance ().getConn ().prepareStatement (sql);
             ps.setInt (1,json.auction_max_price);
             ps.setString (2,json.max_price_user_id);
@@ -74,7 +76,7 @@ public class KProduction {
     public static Message deleteProduction(ProductionJson json){
         try {
             int proid = json.production_id;
-            var sql = "DELETE * FROM production WHERE production_id=?";
+            var sql = "DELETE FROM production WHERE id=?";
             var ps = Database.getInstance ().getConn ().prepareStatement (sql);
             ps.setInt (1,proid);
             ;
@@ -107,6 +109,8 @@ public class KProduction {
                 pro.bought = rs.getBoolean ("bought");
                 pro.buyer_id = rs.getString ("buyer_id");
                 pro.post_time = rs.getTimestamp ("produce_tiem").getTime ();
+                Blob blob = rs.getBlob ("image");
+                pro.pic = blobToBytes (blob);
                 list.add (pro);
             }
             return list;
@@ -116,10 +120,36 @@ public class KProduction {
         return null;
     }
 
+    private static byte[] blobToBytes(Blob blob){
+        BufferedInputStream is = null;
+
+        try {
+            is = new BufferedInputStream(blob.getBinaryStream());
+            byte[] bytes = new byte[(int) blob.length()];
+            int len = bytes.length;
+            int offset = 0;
+            int read = 0;
+
+            while (offset < len && (read = is.read(bytes, offset, len - offset)) >= 0) {
+                offset += read;
+            }
+            return bytes;
+        } catch (Exception e) {
+            return null;
+        } finally {
+            try {
+                is.close();
+                is = null;
+            } catch (IOException e) {
+                return null;
+            }
+        }
+    }
+
     //获取商品信息
     public static ProductionJson getProductionInfo(int proid){
         try {
-            var sql = "SELECT * FROM production WHERE production_id=?";
+            var sql = "SELECT * FROM production WHERE id=?";
             var ps = Database.getInstance ().getConn ().prepareStatement (sql);
             ps.setInt (1,proid);
             var rs = ps.executeQuery ();
@@ -136,6 +166,8 @@ public class KProduction {
                 pro.bought = rs.getBoolean ("bought");
                 pro.buyer_id = rs.getString ("buyer_id");
                 pro.post_time = rs.getTimestamp ("post_time").getTime ();
+                Blob blob = rs.getBlob ("image");
+                pro.pic = blobToBytes (blob);
             }
             return pro;
         } catch (SQLException e) {

@@ -6,7 +6,7 @@ public class Database {
     private static Database instance;
     private final String DATABASE = "jdbc:mysql://localhost:3306/trade?serverTimezone=GMT%2B8";
     private final String USERNAME = "root";
-    private final String PASSWORD = "12345678";
+    private final String PASSWORD = "001225";//"12345678";
 
     public static Database getInstance(){
         return instance;
