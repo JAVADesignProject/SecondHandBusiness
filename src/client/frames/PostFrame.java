@@ -30,6 +30,7 @@ public class PostFrame extends JFrame {
     private JLabel cautionLabel;
     private MKButton uploadPicButton;
     private MKButton finishButton;
+    private JLabel statusLabel;
     private JFileChooser chooser;
     private File picture;
 
@@ -53,11 +54,11 @@ public class PostFrame extends JFrame {
 
     private void initComponents() {
         postLeftPanel = new JPanel();
-        postLeftPanel.setPreferredSize(new Dimension(150, WINDOW_HEIGHT));
+        postLeftPanel.setPreferredSize(new Dimension(160, WINDOW_HEIGHT));
         postRightPanel = new JPanel();
 
         nameLabel = new JLabel("商品名称:");
-        priceLabel = new JLabel("商品价格:");
+        priceLabel = new JLabel("商品价格/起拍价:");
         descriptionLabel = new JLabel("商品描述:");
         cautionLabel = new JLabel();
 
@@ -77,6 +78,11 @@ public class PostFrame extends JFrame {
         finishButton = new MKButton("发 布", Colors.MAIN_COLOR, Colors.MAIN_COLOR_DARKER, Colors.MAIN_COLOR_DARKER);
         finishButton.setFont(FontUtil.getDefaultFont(18));
         finishButton.setPreferredSize(new Dimension(120, 35));
+
+        statusLabel = new JLabel();
+        statusLabel.setForeground(Colors.RED);
+        statusLabel.setFont(FontUtil.getDefaultFont(16));
+        statusLabel.setVisible(false);
 
         nameField = new MKTextField();
         priceField = new MKTextField();
@@ -112,6 +118,8 @@ public class PostFrame extends JFrame {
         postLeftPanel.add(uploadPicButton);
         postLeftPanel.add(cautionLabel);
         postLeftPanel.add(finishButton);
+        postLeftPanel.add(statusLabel);
+
 
         postRightPanel.setLayout(new VerticalFlowLayout(VerticalFlowLayout.TOP, 10, 25, true, false));
         postRightPanel.setBackground(Colors.WINDOW_BACKGROUND);
@@ -168,19 +176,30 @@ public class PostFrame extends JFrame {
         finishButton.addMouseListener(new AbstractMouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                post();
+                if (nameField.getText() == null || nameField.getText().isEmpty() || nameField.getText().isBlank()) {
+                    showMessage("请输入商品名称");
+                } else if (priceField.getText() == null || priceField.getText().isEmpty() || priceField.getText().isBlank()) {
+                    showMessage("请输入商品价格/起拍价");
+                } else if (descriptionArea.getText() == null || descriptionArea.getText().isEmpty() || descriptionArea.getText().isBlank()) {
+                    showMessage("请输入商品描述");
+                } else if (picture == null) {
+                    showMessage("请选择商品图片");
+                } else {
+                    post();
+                }
             }
         });
     }
 
     private void post() {
         ProductionJson production = new ProductionJson();
-        byte[] buffer = new byte[(int)picture.length()];
+        byte[] buffer = new byte[(int) picture.length()];
+
         try {
             FileInputStream inputStream = new FileInputStream(picture);
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             while (inputStream.read(buffer) != -1) {
-                outputStream.write(buffer, 0, (int)picture.length());
+                outputStream.write(buffer, 0, (int) picture.length());
             }
             inputStream.close();
             outputStream.close();
@@ -188,13 +207,28 @@ public class PostFrame extends JFrame {
             e.printStackTrace();
         }
 
-        production.price = Integer.parseInt(priceField.getText());
         production.name = nameField.getText();
         production.introduction = descriptionArea.getText();
         production.producer_id = CurrentUser.userId;
-        production.auction = auctionCheckBox.isSelected();
         production.post_time = System.currentTimeMillis();
         production.pic = buffer;
+        production.auction = auctionCheckBox.isSelected();
+        if (production.auction) {
+            production.price = 0;
+            production.auction_max_price = Integer.parseInt(priceField.getText());
+        } else {
+            production.price = Integer.parseInt(priceField.getText());
+            production.auction_max_price = 0;
+        }
         MKPost.getInstance().addProduction(production);
+        dispose();
     }
+
+    private void showMessage(String message) {
+        if (!statusLabel.isVisible()) {
+            statusLabel.setVisible(true);
+        }
+        statusLabel.setText(message);
+    }
+
 }
