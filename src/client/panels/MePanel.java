@@ -7,11 +7,14 @@ import client.frames.AboutFrame;
 import client.frames.ChangePasswordFrame;
 import client.listener.AbstractMouseListener;
 import client.tasks.CurrentUser;
+import client.tasks.MKPost;
+import client.tasks.MKSocket;
 import client.utils.FontUtil;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 public class MePanel extends JPanel {
     private JPanel upPanel;

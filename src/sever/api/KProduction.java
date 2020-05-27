@@ -17,7 +17,7 @@ public class KProduction {
     //添加商品
     public static Message addProduction(ProductionJson json){
         try {
-            var sql = "INSERT INTO production (name, price, producer_id, post_time, introduction, auction, image) VALUES (?,?,?,?,?,?,?)";
+            var sql = "INSERT INTO production (name, price, producer_id, post_time, introduction, auction, image, auction_max_price) VALUES (?,?,?,?,?,?,?,?)";
             var ps = Database.getInstance ().getConn ().prepareStatement (sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString (1,json.name);
             ps.setInt (2,json.price);
@@ -28,6 +28,7 @@ public class KProduction {
             Blob blob =  Database.getInstance().getConn().createBlob();
             blob.setBytes(1, json.pic);
             ps.setBlob(7, blob);
+            ps.setInt(8, json.auction_max_price);
             ps.executeUpdate ();
             var rs= ps.getGeneratedKeys ();
             int proid = 0;

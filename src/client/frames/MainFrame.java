@@ -20,10 +20,6 @@ public class MainFrame extends JFrame {
         initComponents();
         initView();
         centerScreen();
-//        initResource();
-
-//         连接WebSocket
-//        startWebSocket();
     }
 
     public MainFrame getContext() {

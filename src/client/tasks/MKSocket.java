@@ -12,6 +12,7 @@ public class MKSocket {
     private final Socket socket;
     private final DataInputStream reader;
     private final DataOutputStream writer;
+    public static final int WRITE_READ_UTF_MAX_LENGTH = 65000;//65535
 
     public MKSocket(Socket socket) throws IOException {
         this.socket = socket;
@@ -24,11 +25,24 @@ public class MKSocket {
     }
 
     public String readUTF() throws IOException {
-        return reader.readUTF();
+        String temp = reader.readUTF ();
+        StringBuilder builder = new StringBuilder();
+        while (temp.length() >= WRITE_READ_UTF_MAX_LENGTH) {
+            builder.append(temp);
+            temp = reader.readUTF ();
+        }
+        builder.append(temp);
+        return builder.toString();
     }
 
     public void writeUTF(String line) throws IOException {
-        writer.writeUTF(line);
+        if (line.length() > WRITE_READ_UTF_MAX_LENGTH) {
+            for (int i = 1; i < line.length() / WRITE_READ_UTF_MAX_LENGTH + 2; i++) {
+                writer.writeUTF(line.substring(WRITE_READ_UTF_MAX_LENGTH * (i - 1), Math.min(WRITE_READ_UTF_MAX_LENGTH * i, line.length())));
+            }
+        } else {
+            writer.writeUTF(line);
+        }
         writer.flush();
     }
 

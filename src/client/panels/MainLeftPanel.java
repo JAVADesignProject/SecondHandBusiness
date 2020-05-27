@@ -99,7 +99,7 @@ public class MainLeftPanel extends JPanel {
                 PostFrame frame = new PostFrame();
                 frame.addWindowListener(new WindowAdapter() {
                     @Override
-                    public void windowClosing(WindowEvent e) {
+                    public void windowClosed(WindowEvent e) {
                         MainFrame.context.setEnabled(true);
                     }
                 });
