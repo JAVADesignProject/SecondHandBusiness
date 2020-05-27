@@ -98,7 +98,7 @@ public class KProduction {
             List<ProductionJson> list  = new ArrayList<> ();
             while(rs.next ()){
                 var pro = new ProductionJson ();
-                pro.production_id = rs.getInt ("production_id");
+                pro.production_id = rs.getInt ("id");
                 pro.name = rs.getString ("name");
                 pro.price = rs.getInt ("price");
                 pro.introduction = rs.getString ("introduction");
@@ -155,7 +155,7 @@ public class KProduction {
             var rs = ps.executeQuery ();
             var pro = new ProductionJson ();
             if(rs.next ()){
-                pro.production_id = rs.getInt ("production_id");
+                pro.production_id = rs.getInt ("id");
                 pro.name = rs.getString ("name");
                 pro.price = rs.getInt ("price");
                 pro.introduction = rs.getString ("introduction");
@@ -185,7 +185,7 @@ public class KProduction {
             List<ProductionJson> list = new ArrayList<> ();
             while(rs.next ()){
                 var pro = new ProductionJson ();
-                pro.production_id = rs.getInt ("production_id");
+                pro.production_id = rs.getInt ("id");
                 pro.name = rs.getString ("name");
                 pro.price = rs.getInt ("price");
                 pro.introduction = rs.getString ("introduction");

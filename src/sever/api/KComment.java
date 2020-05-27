@@ -28,15 +28,15 @@ public class KComment {
 
     public static List<CommentJson> getComment(int proid){
         try {
-            var sql = "SELECT * FROM comment WHERE porduction_id=? ORDER BY ";
+            var sql = "SELECT * FROM comment WHERE production_id=? ORDER BY review_time";
             var ps = Database.getInstance ().getConn ().prepareStatement (sql);
             ps.setInt (1,proid);
             var rs = ps.executeQuery ();
             List<CommentJson> list = new ArrayList<> ();
             while (rs.next ()){
                 CommentJson comment = new CommentJson ();
-                comment.comment_id = rs.getInt ("comment_id");
-                comment.reviewer_id = rs.getString ("revew_id");
+                comment.comment_id = rs.getInt ("id");
+                comment.reviewer_id = rs.getString ("reviewer_id");
                 comment.text = rs.getString ("content");
                 comment.time = rs.getTimestamp ("review_time").getTime ();
                 comment.production_id = proid;
