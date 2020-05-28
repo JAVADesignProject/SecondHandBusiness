@@ -171,8 +171,6 @@ public class KProduction {
                 Blob blob = rs.getBlob ("image");
                 pro.pic = blobToBytes (blob);
                 productions.add(pro);
-
-
             }
             return productions;
         } catch (SQLException e) {

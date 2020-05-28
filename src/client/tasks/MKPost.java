@@ -99,4 +99,32 @@ public class MKPost {
     public synchronized void buyNormalProduction(ProductionJson production) {
         post(new Message(KClass.NORMAL_PRODUCTION_BUY, token, production.toString()));
     }
+
+    public synchronized Message addComment(CommentJson comment){
+        return post(new Message (KClass.ADD_COMMENT, token, comment.toString ()));
+    }
+
+    public synchronized Message getComment(ProductionJson production){
+        return post(new Message (KClass.GET_COMMENT, token, production.toString ()));
+    }
+
+    public synchronized Message search(String keyword){
+        return post(new Message (KClass.SEARCH, token, keyword));
+    }
+
+    public synchronized Message buyNormalProduction(ProductionJson production){
+        return post(new Message (KClass.NORMAL_PRODUCTION_BUY, token, production.toString ()));
+    }
+
+    public synchronized  Message buyAuctionProduction(ProductionJson production){
+        return post (new Message (KClass.AUCTION_PRODUCTION_BUY, token, production.toString ()));
+    }
+
+    public synchronized Message getMyProduction(UserJson user){
+        return post (new Message (KClass.MY_PRODUCTION, token, user.toString ()));
+    }
+
+    public synchronized Message deleteProduction(ProductionJson production){
+        return post(new Message (KClass.DELETE_PRODUCTION, token, production.toString ()));
+    }
 }
