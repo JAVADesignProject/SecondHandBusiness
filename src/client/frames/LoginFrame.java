@@ -3,7 +3,7 @@ package client.frames;
 import base.Parser;
 import client.components.*;
 import client.listener.AbstractMouseListener;
-import client.tasks.CurrentUser;
+import client.utils.CurrentUser;
 import client.tasks.MKPost;
 import client.utils.FontUtil;
 import base.json.UserJson;
@@ -59,7 +59,7 @@ public class LoginFrame extends JFrame {
 
         Dimension textFieldDimension = new Dimension(218, 42);
         usernameField = new MKTextField();                                                                              //新建一个自定义的文本框
-        usernameField.setPlaceholder("用户名");                                                                          //设置文本框内提示内容
+        usernameField.setPlaceholder("学号");                                                                          //设置文本框内提示内容
         usernameField.setPreferredSize(textFieldDimension);                                                             //设置文本框大小
         usernameField.setFont(FontUtil.getDefaultFont(16));                                                        //设置输入文字的字体大小
         usernameField.setForeground(Colors.FONT_BLACK);                                                                 //设置输入文字的字体颜色
@@ -174,16 +174,20 @@ public class LoginFrame extends JFrame {
             var result = MKPost.getInstance().login(user);
             if (result.code == 0) {
                 showMessage("登录成功，加载主界面");
+
                 user = MKPost.getInstance().getUserInfo(username);
                 CurrentUser.userId = user.userID;
                 CurrentUser.username = user.username;
                 CurrentUser.password = user.password;
                 CurrentUser.status = user.status;
                 CurrentUser.targetUsers = MKPost.getInstance().getChatUser(user);
-                System.out.println(CurrentUser.targetUsers);
+                CurrentUser.productions = MKPost.getInstance().getProduction();
+                CurrentUser.follow = CurrentUser.targetUsers.size();
+
                 MainFrame frame = new MainFrame();
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setVisible(true);
+
                 dispose();
             } else {
                 showMessage("登录失败" + result.code);

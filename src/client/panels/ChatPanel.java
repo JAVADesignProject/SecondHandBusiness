@@ -1,7 +1,6 @@
 package client.panels;
 
 import base.KClass;
-import base.Message;
 import base.json.MessageJson;
 import base.json.UserJson;
 import client.components.ChatBar;
@@ -9,7 +8,7 @@ import client.components.Colors;
 import client.components.MKButton;
 import client.components.MKChatBubble;
 import client.listener.MKListener;
-import client.tasks.CurrentUser;
+import client.utils.CurrentUser;
 import client.tasks.MKChatClient;
 import client.tasks.MKFileClient;
 import client.tasks.MKPost;

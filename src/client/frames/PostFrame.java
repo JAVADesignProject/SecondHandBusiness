@@ -3,7 +3,7 @@ package client.frames;
 import base.json.ProductionJson;
 import client.components.*;
 import client.listener.AbstractMouseListener;
-import client.tasks.CurrentUser;
+import client.utils.CurrentUser;
 import client.tasks.MKPost;
 import client.utils.FontUtil;
 
@@ -12,8 +12,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.*;
-import java.util.Arrays;
-import java.util.Base64;
 
 public class PostFrame extends JFrame {
     private static final int WINDOW_WIDTH = 800;
@@ -69,7 +67,7 @@ public class PostFrame extends JFrame {
         cautionLabel.setFont(FontUtil.getDefaultFont(16));
         cautionLabel.setForeground(Colors.FONT_GRAY_DARKER);
         cautionLabel.setPreferredSize(new Dimension(120, 130));
-        cautionLabel.setText("<html>最多上传1张照片，照片大小不大于5MB，尺寸为aaa x bbb<html>");
+        cautionLabel.setText("<html>最多上传1张照片，照片大小不大于5MB，尺寸为aaa x bbb</html>");
 
         uploadPicButton = new MKButton("上传图片", Colors.MAIN_COLOR,Colors.MAIN_COLOR_DARKER, Colors.MAIN_COLOR_DARKER);
         uploadPicButton.setFont(FontUtil.getDefaultFont(18));

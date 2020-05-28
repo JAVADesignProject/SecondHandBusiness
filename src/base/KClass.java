@@ -1,7 +1,5 @@
 package base;
 
-import java.util.Calendar;
-
 public class KClass {
     public static final String HOST = "localhost";//主机地址
     public static final int INFO_PORT = 5689;//信息服务端口（注册、登录、查询商品、购买商品）
@@ -24,7 +22,7 @@ public class KClass {
     public static final int MY_PRODUCTION = 12;//我的商品
     public static final int GET_COMMENT = 13;//获取评论
     public static final int ADD_COMMENT = 14;//添加评论
-    public static final int MY_CHAT = 15;       // 我的班级
+    public static final int MY_CHAT = 15;       //我的消息列表
 
     /**
      * 缓存文件夹路径

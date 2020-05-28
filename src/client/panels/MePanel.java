@@ -6,15 +6,12 @@ import client.components.VerticalFlowLayout;
 import client.frames.AboutFrame;
 import client.frames.ChangePasswordFrame;
 import client.listener.AbstractMouseListener;
-import client.tasks.CurrentUser;
-import client.tasks.MKPost;
-import client.tasks.MKSocket;
+import client.utils.CurrentUser;
 import client.utils.FontUtil;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 
 public class MePanel extends JPanel {
     private JPanel upPanel;
@@ -42,18 +39,15 @@ public class MePanel extends JPanel {
         upPanel = new JPanel();
         middlePanel = new JPanel();
         downPanel = new JPanel();
-//        upPanel.setBorder(new LineBorder(Colors.MAIN_COLOR));
-//        middlePanel.setBorder(new LineBorder(Colors.MAIN_COLOR));
-//        downPanel.setBorder(new LineBorder(Colors.MAIN_COLOR));
 
         ImageIcon postIcon = new ImageIcon("res/image/posted.png");
         ImageIcon sellIcon = new ImageIcon("res/image/sold.png");
         ImageIcon boughtIcon = new ImageIcon("res/image/bought.png");
 
-        welcomeLabel = new JLabel("欢 迎 " + CurrentUser.username);
-        collectionLabel = new JLabel("0" + "我收藏的", SwingConstants.CENTER);
-        followLabel = new JLabel("0" + "我关注的", SwingConstants.CENTER);
-        fanLabel = new JLabel("0" + "我的粉丝", SwingConstants.CENTER);
+        welcomeLabel = new JLabel("<html>欢&nbsp&nbsp迎<br>" + CurrentUser.username + "</html>");
+        collectionLabel = new JLabel(CurrentUser.collection + "我收藏的", SwingConstants.CENTER);
+        followLabel = new JLabel(CurrentUser.follow + "我关注的", SwingConstants.CENTER);
+        fanLabel = new JLabel();
         postLabel = new JLabel("我发布的", postIcon, SwingConstants.CENTER);
         sellLabel = new JLabel("我卖出的", sellIcon, SwingConstants.CENTER);
         boughtLabel = new JLabel("我买到的", boughtIcon, SwingConstants.CENTER);
@@ -73,7 +67,7 @@ public class MePanel extends JPanel {
 
         setLabel(collectionLabel);
         setLabel(followLabel);
-        setLabel(fanLabel);
+        //setLabel(fanLabel);
         setLabel(postLabel);
         setLabel(sellLabel);
         setLabel(boughtLabel);
@@ -88,8 +82,8 @@ public class MePanel extends JPanel {
         upPanel.add(welcomeLabel);
 
         middlePanel.add(collectionLabel);
-        middlePanel.add(followLabel);
         middlePanel.add(fanLabel);
+        middlePanel.add(followLabel);
         middlePanel.add(postLabel);
         middlePanel.add(sellLabel);
         middlePanel.add(boughtLabel);

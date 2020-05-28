@@ -2,30 +2,31 @@ package client.panels;
 
 import client.components.Colors;
 import client.components.MKButton;
+import client.frames.NormalProductionFrame;
+import client.listener.AbstractMouseListener;
+import client.utils.CurrentUser;
+import client.utils.FontUtil;
+import client.utils.ImageTools;
 
+import javax.imageio.stream.FileImageOutputStream;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 
 public class HomePanel extends JPanel {
-    JPanel upPanel;
-    JPanel downPanel;
-    JPanel leftPanel;
-    JPanel rightPanel;
-    JPanel centerPanel;
-    JLabel label1;
-    JLabel label2;
-    JLabel label3;
-    JLabel label4;
-    JLabel label5;
-    JLabel label6;
-    MKButton nextPage;
-    MKButton previousPage;
+    private JPanel upPanel;
+    private JPanel downPanel;
+    private JPanel leftPanel;
+    private JPanel rightPanel;
+    private JPanel centerPanel;
+    private MKButton nextPage;
+    private MKButton previousPage;
 
     public HomePanel(){
         initComponents();
         initView();
-        //setListener();
     }
 
     private void initComponents() {
@@ -34,13 +35,6 @@ public class HomePanel extends JPanel {
         leftPanel = new JPanel();
         rightPanel = new JPanel();
         centerPanel = new JPanel();
-
-        label1 = new JLabel("1");
-        label2 = new JLabel("2");
-        label3 = new JLabel("3");
-        label4 = new JLabel("4");
-        label5 = new JLabel("5");
-        label6 = new JLabel("6");
 
         nextPage = new MKButton(null, Colors.MAIN_COLOR, Colors.MAIN_COLOR_DARKER, Colors.MAIN_COLOR_DARKER, new ImageIcon("res/image/nextPage.png"));
         previousPage = new MKButton(null, Colors.MAIN_COLOR, Colors.MAIN_COLOR_DARKER, Colors.MAIN_COLOR_DARKER, new ImageIcon("res/image/previousPage.png"));
@@ -54,29 +48,38 @@ public class HomePanel extends JPanel {
         rightPanel.setPreferredSize(new Dimension(30,25));
         centerPanel.setPreferredSize(new Dimension(750,550));
 
-//        upPanel.setBorder(new LineBorder(Colors.MAIN_COLOR));
-//        downPanel.setBorder(new LineBorder(Colors.MAIN_COLOR));
-//        leftPanel.setBorder(new LineBorder(Colors.MAIN_COLOR));
-//        rightPanel.setBorder(new LineBorder(Colors.MAIN_COLOR));
-//        centerPanel.setBorder(new LineBorder(Colors.MAIN_COLOR));
-
-        label1.setBorder(new LineBorder(Colors.MAIN_COLOR));
-        label2.setBorder(new LineBorder(Colors.MAIN_COLOR));
-        label3.setBorder(new LineBorder(Colors.MAIN_COLOR));
-        label4.setBorder(new LineBorder(Colors.MAIN_COLOR));
-        label5.setBorder(new LineBorder(Colors.MAIN_COLOR));
-        label6.setBorder(new LineBorder(Colors.MAIN_COLOR));
+        for (var i : CurrentUser.productions) {
+            if (!i.auction) {
+                File temp = new File("res/cache/" + i.name + ".jpeg");
+                try {
+                    if (!temp.exists()) {
+                        FileImageOutputStream imageOutput = new FileImageOutputStream(temp);
+                        imageOutput.write(i.pic, 0, i.pic.length);
+                        imageOutput.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ImageIcon icon = new ImageIcon(temp.getPath());
+                icon.setImage(icon.getImage().getScaledInstance(ImageTools.getImgWidth(temp) / 3, ImageTools.getImgHeight(temp) / 3, Image.SCALE_SMOOTH));
+                JLabel label = new JLabel(i.name, icon, SwingConstants.CENTER);
+                label.setVerticalTextPosition(SwingConstants.BOTTOM);
+                label.setHorizontalTextPosition(SwingConstants.CENTER);
+                label.setFont(FontUtil.getDefaultFont(18));
+                label.addMouseListener(new AbstractMouseListener() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        super.mouseClicked(e);
+                        NormalProductionFrame frame = new NormalProductionFrame(i, temp);
+                    }
+                });
+                centerPanel.add(label);
+            }
     }
+}
 
     private void initView() {
-        centerPanel.add(label1);
-        centerPanel.add(label2);
-        centerPanel.add(label3);
-        centerPanel.add(label4);
-        centerPanel.add(label5);
-        centerPanel.add(label6);
         centerPanel.setLayout(new GridLayout(2, 3, 20, 20));
-
         downPanel.add(previousPage);
         downPanel.add(nextPage);
 

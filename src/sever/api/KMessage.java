@@ -69,7 +69,7 @@ public class KMessage {
             ps.setString (3, messageJson.sender);
             ps.setString (4, messageJson.receiver);
             var rs = ps.executeQuery ();
-            List<MessageJson> list = new ArrayList<> ();
+            List<MessageJson> messages = new ArrayList<> ();
             while(rs.next ()){
                 var msg = new MessageJson ();
                 msg.msgid = rs.getInt ("id");
@@ -77,11 +77,11 @@ public class KMessage {
                 msg.sender = rs.getString ("sender_id");
                 msg.text = rs.getString ("text");
                 msg.time = rs.getTimestamp ("time").getTime ();
-                list.add(msg);
+                messages.add(msg);
                 //阅读过后就移除这条消息
                 //removeMessage (msg.msgid);
             }
-            return list;
+            return messages;
         } catch (SQLException e) {
             e.printStackTrace ( );
         }

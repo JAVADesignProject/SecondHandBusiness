@@ -88,12 +88,14 @@ public class MainLeftPanel extends JPanel {
                 chatLabel.setIcon(chatIconNormal);
                 meLabel.setIcon(meIconNormal);
                 MainRightPanel.getInstance().showHomePanel();
+                System.gc();
             } else if (e.getComponent() == askLabel) {
                 homeLabel.setIcon(homeIconNormal);
                 askLabel.setIcon(askIconActive);
                 chatLabel.setIcon(chatIconNormal);
                 meLabel.setIcon(meIconNormal);
                 MainRightPanel.getInstance().showAskPanel();
+                System.gc();
             } else if (e.getComponent() == postButton) {
                 MainFrame.context.setEnabled(false);
                 PostFrame frame = new PostFrame();
@@ -109,12 +111,14 @@ public class MainLeftPanel extends JPanel {
                 chatLabel.setIcon(chatIconActive);
                 meLabel.setIcon(meIconNormal);
                 MainRightPanel.getInstance().showChatPanel();
+                System.gc();
             } else if (e.getComponent() == meLabel) {
                 homeLabel.setIcon(homeIconNormal);
                 askLabel.setIcon(askIconNormal);
                 chatLabel.setIcon(chatIconNormal);
                 meLabel.setIcon(meIconActive);
                 MainRightPanel.getInstance().showMePanel();
+                System.gc();
             }
         }
     }

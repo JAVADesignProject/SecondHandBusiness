@@ -88,6 +88,7 @@ public class KProduction {
         }
         return null;
     }
+
     //搜索商品
     public static List<ProductionJson> search(String keyword){
         try {
@@ -148,15 +149,15 @@ public class KProduction {
     }
 
     //获取商品信息
-    public static ProductionJson getProductionInfo(int proid){
+    public static List<ProductionJson> getProductionInfo() {
         try {
-            var sql = "SELECT * FROM production WHERE id=?";
+            var sql = "SELECT * FROM production";
             var ps = Database.getInstance ().getConn ().prepareStatement (sql);
-            ps.setInt (1,proid);
             var rs = ps.executeQuery ();
-            var pro = new ProductionJson ();
-            if(rs.next ()){
-                pro.production_id = rs.getInt ("production_id");
+            List<ProductionJson> productions = new ArrayList<ProductionJson>();
+            while (rs.next ()){
+                ProductionJson pro = new ProductionJson ();
+                pro.production_id = rs.getInt ("id");
                 pro.name = rs.getString ("name");
                 pro.price = rs.getInt ("price");
                 pro.introduction = rs.getString ("introduction");
@@ -169,8 +170,11 @@ public class KProduction {
                 pro.post_time = rs.getTimestamp ("post_time").getTime ();
                 Blob blob = rs.getBlob ("image");
                 pro.pic = blobToBytes (blob);
+                productions.add(pro);
+
+
             }
-            return pro;
+            return productions;
         } catch (SQLException e) {
             e.printStackTrace ( );
         }

@@ -3,17 +3,8 @@ package client.panels;
 import javax.swing.*;
 
 public class MainRightPanel extends JPanel {
-    private HomePanel homePanel;
-    private AskPanel askPanel;
-    private ChatPanel chatPanel;
-    private MePanel mePanel;
 
     public static MainRightPanel context;
-
-    private MainRightPanel() {
-        initComponents();
-        initView();
-    }
 
     public static MainRightPanel getInstance() {
         if(context == null) {
@@ -23,50 +14,32 @@ public class MainRightPanel extends JPanel {
         return context;
     }
 
-    private void initComponents() {
-        homePanel = new HomePanel();
-        askPanel = new AskPanel();
-        chatPanel = new ChatPanel();
-        mePanel = new MePanel();
-    }
-
-    private void initView() {
-        homePanel.setVisible(false);
-        askPanel.setVisible(false);
-        chatPanel.setVisible(false);
-        mePanel.setVisible(false);
-        add(homePanel);
-        add(askPanel);
-        add(chatPanel);
-        add(mePanel);
-    }
-
     public void showHomePanel() {
-        homePanel.setVisible(true);
-        askPanel.setVisible(false);
-        chatPanel.setVisible(false);
-        mePanel.setVisible(false);
+        removeAll();
+        updateUI();
+        HomePanel homePanel = new HomePanel();
+        add(homePanel);
     }
 
     public void showAskPanel() {
-        homePanel.setVisible(false);
-        askPanel.setVisible(true);
-        chatPanel.setVisible(false);
-        mePanel.setVisible(false);
+        removeAll();
+        updateUI();
+        AskPanel askPanel = new AskPanel();
+        add(askPanel);
     }
 
     public void showChatPanel() {
-        homePanel.setVisible(false);
-        askPanel.setVisible(false);
-        chatPanel.setVisible(true);
-        mePanel.setVisible(false);
+        removeAll();
+        updateUI();
+        ChatPanel chatPanel = new ChatPanel();
+        add(chatPanel);
     }
 
     public void showMePanel() {
-        homePanel.setVisible(false);
-        askPanel.setVisible(false);
-        chatPanel.setVisible(false);
-        mePanel.setVisible(true);
+        removeAll();
+        updateUI();
+        MePanel mePanel = new MePanel();
+        add(mePanel);
     }
 
 }

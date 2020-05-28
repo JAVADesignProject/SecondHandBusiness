@@ -3,6 +3,7 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/sever/api/KMessage.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/sever/api/KProduction.java" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/trade.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/sever/api/KUser.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/trade.sql" dialect="GenericSQL" />
   </component>
 </project>

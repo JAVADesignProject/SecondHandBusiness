@@ -27,7 +27,7 @@ public class Launcher {
             new MKPost();
             new MKChatClient();
             new MKFileClient();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

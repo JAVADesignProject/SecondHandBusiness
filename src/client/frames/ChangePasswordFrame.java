@@ -7,7 +7,7 @@ import client.components.MKButton;
 import client.components.MKPasswordField;
 import client.components.VerticalFlowLayout;
 import client.listener.AbstractMouseListener;
-import client.tasks.CurrentUser;
+import client.utils.CurrentUser;
 import client.tasks.MKPost;
 import client.utils.FontUtil;
 

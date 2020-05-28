@@ -3,6 +3,7 @@ package client.tasks;
 import base.KClass;
 import base.Message;
 import base.Parser;
+import base.json.CommentJson;
 import base.json.MessageJson;
 import base.json.ProductionJson;
 import base.json.UserJson;
@@ -77,7 +78,25 @@ public class MKPost {
         return Parser.fromJson(result.props, new TypeToken<List<MessageJson>>() {}.getType());
     }
 
-    public synchronized Message addProduction(ProductionJson production) {
-        return post(new Message(KClass.ADD_PRODUCTION, token, production.toString()));
+    public synchronized void addProduction(ProductionJson production) {
+        post(new Message(KClass.ADD_PRODUCTION, token, production.toString()));
+    }
+
+    public synchronized List<ProductionJson> getProduction() {
+        var result = post(new Message(KClass.PRODUCTION_INFO, token, null));
+        return Parser.fromJson(result.props, new TypeToken<List<ProductionJson>>(){}.getType());
+    }
+
+    public synchronized void addComment(CommentJson comment) {
+        post(new Message(KClass.ADD_COMMENT, token, comment.toString()));
+    }
+
+    public synchronized List<CommentJson> getComment(int productionID) {
+        var result = post(new Message(KClass.GET_COMMENT, token, Integer.toString(productionID)));
+        return Parser.fromJson(result.props, new TypeToken<List<CommentJson>>(){}.getType());
+    }
+
+    public synchronized void buyNormalProduction(ProductionJson production) {
+        post(new Message(KClass.NORMAL_PRODUCTION_BUY, token, production.toString()));
     }
 }
