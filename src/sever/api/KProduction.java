@@ -184,6 +184,66 @@ public class KProduction {
         try {
             var sql = "SELECT * FROM production WHERE producer_id=?";
             var ps = Database.getInstance ().getConn ().prepareStatement (sql);
+            ps.setString (1,userid);
+            var rs = ps.executeQuery ();
+            List<ProductionJson> list = new ArrayList<> ();
+            while(rs.next ()){
+                var pro = new ProductionJson ();
+                pro.production_id = rs.getInt ("production_id");
+                pro.name = rs.getString ("name");
+                pro.price = rs.getInt ("price");
+                pro.introduction = rs.getString ("introduction");
+                pro.producer_id = rs.getString ("producer_id");
+                pro.auction = rs.getBoolean ("auction");
+                pro.auction_max_price  = rs.getInt("auction_max_price");
+                pro.max_price_user_id = rs.getString ("max_price_user_id");
+                pro.bought = rs.getBoolean ("bought");
+                pro.buyer_id = rs.getString ("buyer_id");
+                pro.post_time = rs.getTimestamp ("post_time").getTime ();
+                list.add (pro);
+            }
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace ( );
+        }
+        return null;
+    }
+
+    //获取我卖出的
+    public static List<ProductionJson> getMySold(String userid){
+        try {
+            var sql = "SELECT * FROM production WHERE producer_id=? AND buyer_id IS NOT NULL ORDER BY post_time";
+            var ps = Database.getInstance ().getConn ().prepareStatement (sql);
+            ps.setString (1,userid);
+            var rs = ps.executeQuery ();
+            List<ProductionJson> list = new ArrayList<> ();
+            while(rs.next ()){
+                var pro = new ProductionJson ();
+                pro.production_id = rs.getInt ("production_id");
+                pro.name = rs.getString ("name");
+                pro.price = rs.getInt ("price");
+                pro.introduction = rs.getString ("introduction");
+                pro.producer_id = rs.getString ("producer_id");
+                pro.auction = rs.getBoolean ("auction");
+                pro.auction_max_price  = rs.getInt("auction_max_price");
+                pro.max_price_user_id = rs.getString ("max_price_user_id");
+                pro.bought = rs.getBoolean ("bought");
+                pro.buyer_id = rs.getString ("buyer_id");
+                pro.post_time = rs.getTimestamp ("post_time").getTime ();
+                list.add (pro);
+            }
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace ( );
+        }
+        return null;
+    }
+
+    //获取我买到的
+    public static List<ProductionJson> getMyGot(String uerid){
+        try {
+            var sql = "SELECT * FROM production WHERE buyer_id = ?";
+            var ps = Database.getInstance ().getConn ().prepareStatement (sql);
             var rs = ps.executeQuery ();
             List<ProductionJson> list = new ArrayList<> ();
             while(rs.next ()){

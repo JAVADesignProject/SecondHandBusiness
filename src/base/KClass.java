@@ -23,6 +23,8 @@ public class KClass {
     public static final int GET_COMMENT = 13;//获取评论
     public static final int ADD_COMMENT = 14;//添加评论
     public static final int MY_CHAT = 15;       //我的消息列表
+    public static final int MY_SOLD = 16;//我卖出的商品
+    public static final int MY_GOT = 17;//我买到的商品
 
     /**
      * 缓存文件夹路径

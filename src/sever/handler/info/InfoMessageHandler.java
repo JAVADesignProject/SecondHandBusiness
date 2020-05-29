@@ -73,7 +73,12 @@ public class InfoMessageHandler extends MessageHandler {
             case KClass.MY_CHAT:
                 result = KMessage.getNewChat(UserJson.parse (message.props));
                 break;
-
+            case KClass.MY_SOLD:
+                result = new Message (0,0,Parser.toJson (KProduction.getMySold (message.props)));
+                break;
+            case KClass.MY_GOT:
+                result = new Message (0,0,Parser.toJson (KProduction.getMyGot (message.props)));
+                break;
         }
         return result;
     }

@@ -116,4 +116,14 @@ public class MKPost {
     public synchronized Message deleteProduction(ProductionJson production){
         return post(new Message(KClass.DELETE_PRODUCTION, token, production.toString ()));
     }
+
+    public synchronized List<ProductionJson> getMySold(String userid){
+        var result = post (new Message (KClass.MY_SOLD,token,userid));
+        return Parser.fromJson (result.props, new TypeToken<List<ProductionJson>> (){}.getType ());
+    }
+
+    public synchronized List<ProductionJson> getMyGot(String userid){
+        var result = post(new Message (KClass.MY_GOT, token, userid));
+        return Parser.fromJson (result.props,new TypeToken<List<ProductionJson>> (){}.getType ());
+    }
 }
