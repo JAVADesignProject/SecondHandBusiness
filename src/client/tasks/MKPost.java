@@ -100,24 +100,20 @@ public class MKPost {
         post(new Message(KClass.NORMAL_PRODUCTION_BUY, token, production.toString()));
     }
 
-
-    public synchronized Message getComment(ProductionJson production){
-        return post(new Message (KClass.GET_COMMENT, token, production.toString ()));
-    }
-
-    public synchronized Message search(String keyword){
-        return post(new Message (KClass.SEARCH, token, keyword));
+    public synchronized List<ProductionJson> search(String keyword){
+        var result = post(new Message(KClass.SEARCH, token, keyword));
+        return Parser.fromJson(result.props, new TypeToken<List<ProductionJson>>(){}.getType());
     }
 
     public synchronized  Message buyAuctionProduction(ProductionJson production){
-        return post (new Message (KClass.AUCTION_PRODUCTION_BUY, token, production.toString ()));
+        return post (new Message(KClass.AUCTION_PRODUCTION_BUY, token, production.toString ()));
     }
 
     public synchronized Message getMyProduction(UserJson user){
-        return post (new Message (KClass.MY_PRODUCTION, token, user.toString ()));
+        return post (new Message(KClass.MY_PRODUCTION, token, user.toString ()));
     }
 
     public synchronized Message deleteProduction(ProductionJson production){
-        return post(new Message (KClass.DELETE_PRODUCTION, token, production.toString ()));
+        return post(new Message(KClass.DELETE_PRODUCTION, token, production.toString ()));
     }
 }

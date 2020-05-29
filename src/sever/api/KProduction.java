@@ -94,13 +94,13 @@ public class KProduction {
         try {
             var sql = "SELECT * FROM production WHERE name LIKE ? OR introduction LIKE ? ORDER BY post_time";
             var ps = Database.getInstance ().getConn ().prepareStatement (sql);
-            ps.setString (1,keyword);
-            ps.setString (2,keyword);
+            ps.setString (1, "%" + keyword + "%");
+            ps.setString (2, "%" + keyword + "%");
             var rs = ps.executeQuery ();
             List<ProductionJson> list  = new ArrayList<> ();
             while(rs.next ()){
                 var pro = new ProductionJson ();
-                pro.production_id = rs.getInt ("production_id");
+                pro.production_id = rs.getInt ("id");
                 pro.name = rs.getString ("name");
                 pro.price = rs.getInt ("price");
                 pro.introduction = rs.getString ("introduction");
@@ -110,14 +110,14 @@ public class KProduction {
                 pro.max_price_user_id = rs.getString ("max_price_user_id");
                 pro.bought = rs.getBoolean ("bought");
                 pro.buyer_id = rs.getString ("buyer_id");
-                pro.post_time = rs.getTimestamp ("produce_tiem").getTime ();
+                pro.post_time = rs.getTimestamp ("post_time").getTime ();
                 Blob blob = rs.getBlob ("image");
                 pro.pic = blobToBytes (blob);
                 list.add (pro);
             }
             return list;
         } catch (SQLException e) {
-            e.printStackTrace ( );
+            e.printStackTrace ();
         }
         return null;
     }
