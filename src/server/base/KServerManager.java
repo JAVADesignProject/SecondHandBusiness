@@ -1,8 +1,8 @@
-package sever.base;
+package server.base;
 
 import base.KClass;
-import sever.sever.KChatSever;
-import sever.sever.KInfoSever;
+import server.server.KChatServer;
+import server.server.KInfoServer;
 
 
 import java.io.IOException;
@@ -14,14 +14,14 @@ public class KServerManager {
 
     public KServerManager() throws IOException {
         System.out.println("数据库已连接");
-        var chatServer = new KChatSever(KClass.CHAT_PORT);
+        var chatServer = new KChatServer (KClass.CHAT_PORT);
         new Thread(chatServer::update).start();
         System.out.println("聊天服务已启动");
 //        var fileServer = new GFileServer(KClass.FILE_PORT);
 //        new Thread(fileServer::update).start();
 //        System.out.println("文件服务已启动");
         // 启动信息传输服务
-        var infoServer = new KInfoSever(KClass.INFO_PORT);
+        var infoServer = new KInfoServer (KClass.INFO_PORT);
         new Thread(infoServer::update).start();
         System.out.println("信息服务已启动");
     }

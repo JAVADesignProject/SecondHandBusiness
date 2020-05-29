@@ -1,10 +1,10 @@
-package sever.api;
+package server.api;
 
 import base.Message;
 import base.Parser;
 import base.json.MessageJson;
 import base.json.UserJson;
-import sever.base.Database;
+import server.base.Database;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;

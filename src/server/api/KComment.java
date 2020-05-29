@@ -1,8 +1,8 @@
-package sever.api;
+package server.api;
 
 import base.Message;
 import base.json.CommentJson;
-import sever.base.Database;
+import server.base.Database;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;

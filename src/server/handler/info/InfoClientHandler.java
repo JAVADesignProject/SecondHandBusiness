@@ -1,16 +1,16 @@
-package sever.handler.info;
+package server.handler.info;
 
 import base.KSocket;
 import base.Message;
-import sever.base.ClientHandler;
-import sever.base.KSever;
-import sever.base.MessageHandler;
+import server.base.ClientHandler;
+import server.base.KServer;
+import server.base.MessageHandler;
 
 import java.io.IOException;
 
 public class InfoClientHandler extends ClientHandler {
 
-    public InfoClientHandler(KSever sever, KSocket client, MessageHandler infoHandler) {
+    public InfoClientHandler(KServer sever, KSocket client, MessageHandler infoHandler) {
         super (sever, client);
         this.messageHandler = infoHandler;
     }

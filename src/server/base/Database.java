@@ -1,4 +1,4 @@
-package sever.base;
+package server.base;
 
 import java.sql.*;
 

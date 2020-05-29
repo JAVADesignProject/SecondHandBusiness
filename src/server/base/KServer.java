@@ -1,4 +1,4 @@
-package sever.base;
+package server.base;
 
 
 import java.io.IOException;
@@ -6,11 +6,11 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class KSever {
+public abstract class KServer {
     protected List<ClientHandler> clients;
     protected ServerSocket serverSocket;
 
-    public KSever(int port)throws IOException{
+    public KServer(int port)throws IOException{
         clients = new ArrayList<> ();
         serverSocket = new ServerSocket (port);
     }

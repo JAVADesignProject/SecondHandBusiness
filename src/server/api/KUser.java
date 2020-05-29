@@ -1,9 +1,9 @@
-package sever.api;
+package server.api;
 
 import base.Message;
 import base.json.UserJson;
-import sever.base.Database;
-import sever.base.KSeverManager;
+import server.base.Database;
+import server.base.KServerManager;
 
 import java.sql.SQLException;
 
@@ -14,10 +14,10 @@ public class KUser {
             if(checkAccount (user)){
                 setUserStatus (user.userID,1);
                 var token = 0;
-                while(KSeverManager.containsToken(token)){
+                while(KServerManager.containsToken(token)){
                     token =(int)(Math.random () * 1e5);
                 }
-                KSeverManager.addToken(token,user.userID);
+                KServerManager.addToken(token,user.userID);
                 return new Message (0,token,"登录成功");
             }else{
                 return new Message (-1,Integer.MAX_VALUE,"登录失败");
@@ -51,13 +51,13 @@ public class KUser {
     }
 
     public static void logout(int token) {
-        var userid = KSeverManager.getUserId(token);
+        var userid = KServerManager.getUserId(token);
         setUserStatus (userid,0);
     }
 
 
     public static int getStatus(int token){
-        var userid = KSeverManager.getUserId(token);
+        var userid = KServerManager.getUserId(token);
         try {
             var updateStatus ="SELECT status FROM user WHERE id=?;";
             var ps = Database.getInstance ().getConn ().prepareStatement (updateStatus);

@@ -1,4 +1,4 @@
-package sever.handler.info;
+package server.handler.info;
 
 import base.KClass;
 import base.Message;
@@ -7,11 +7,11 @@ import base.json.CommentJson;
 import base.json.MessageJson;
 import base.json.ProductionJson;
 import base.json.UserJson;
-import sever.api.KComment;
-import sever.api.KMessage;
-import sever.api.KProduction;
-import sever.api.KUser;
-import sever.base.MessageHandler;
+import server.api.KComment;
+import server.api.KMessage;
+import server.api.KProduction;
+import server.api.KUser;
+import server.base.MessageHandler;
 
 public class InfoMessageHandler extends MessageHandler {
 

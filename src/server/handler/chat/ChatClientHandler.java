@@ -1,11 +1,11 @@
-package sever.handler.chat;
+package server.handler.chat;
 
 import base.KSocket;
 import base.Message;
 import base.json.MessageJson;
-import sever.base.ClientHandler;
-import sever.base.KSever;
-import sever.sever.KChatSever;
+import server.base.ClientHandler;
+import server.base.KServer;
+import server.server.KChatServer;
 
 import java.io.IOException;
 
@@ -16,7 +16,7 @@ public class ChatClientHandler extends ClientHandler {
         return userid;
     }
 
-    public ChatClientHandler(KSever sever, KSocket socket, ChatMessageHandler handler ) {
+    public ChatClientHandler(KServer sever, KSocket socket, ChatMessageHandler handler ) {
         super (sever, socket);
         this.messageHandler = handler;
         ((ChatMessageHandler) this.messageHandler).setClientHandler (this);
@@ -38,7 +38,7 @@ public class ChatClientHandler extends ClientHandler {
 
 
     public void sendMessageToSever(MessageJson json){
-        ((KChatSever)sever).sendMessage(json);
+        ((KChatServer)sever).sendMessage(json);
     }
 
     public void sendNewMessage(MessageJson message){
@@ -51,6 +51,6 @@ public class ChatClientHandler extends ClientHandler {
 
     public void setUserid(String props) {
         userid = props;
-        ((KChatSever)sever).register(userid, this);
+        ((KChatServer)sever).register(userid, this);
     }
 }

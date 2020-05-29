@@ -1,26 +1,26 @@
-package sever.sever;
+package server.server;
 
 import base.KSocket;
 import base.json.MessageJson;
-import sever.api.KMessage;
+import server.api.KMessage;
 //import sever.api.KUser;
-import sever.base.KSever;
-import sever.handler.chat.ChatClientHandler;
-import sever.handler.chat.ChatMessageHandler;
+import server.base.KServer;
+import server.handler.chat.ChatClientHandler;
+import server.handler.chat.ChatMessageHandler;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KChatSever extends KSever {
+public class KChatServer extends KServer {
     private Map<String, ChatClientHandler>chatMap = new HashMap<> ();
-    private static KChatSever instance;
+    private static KChatServer instance;
 
-    public static KChatSever getInstance(){
+    public static KChatServer getInstance(){
         return instance;
     }
 
-    public KChatSever(int port) throws IOException {
+    public KChatServer(int port) throws IOException {
         super (port);
         instance = this;
     }

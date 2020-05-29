@@ -1,10 +1,10 @@
-package sever.handler.chat;
+package server.handler.chat;
 
 import base.KClass;
 import base.Message;
 import base.json.MessageJson;
-import sever.base.KServerManager;
-import sever.base.MessageHandler;
+import server.base.KServerManager;
+import server.base.MessageHandler;
 
 public class ChatMessageHandler extends MessageHandler {
     private ChatClientHandler clientHandler;

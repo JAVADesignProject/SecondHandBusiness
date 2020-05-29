@@ -1,16 +1,16 @@
-package sever.sever;
+package server.server;
 
 import base.KSocket;
-import sever.base.KSever;
-import sever.handler.info.InfoClientHandler;
-import sever.handler.info.InfoMessageHandler;
+import server.base.KServer;
+import server.handler.info.InfoClientHandler;
+import server.handler.info.InfoMessageHandler;
 
 import java.io.IOException;
 
-public class KInfoSever extends KSever {
+public class KInfoServer extends KServer {
 
 
-    public KInfoSever(int port) throws IOException {
+    public KInfoServer(int port) throws IOException {
         super (port);
     }
 

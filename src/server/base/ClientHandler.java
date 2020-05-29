@@ -1,13 +1,13 @@
-package sever.base;
+package server.base;
 
 import base.KSocket;
 
 public abstract class ClientHandler {
-    protected KSever sever;
+    protected KServer sever;
     protected KSocket client;
     protected MessageHandler messageHandler = null;
 
-    public ClientHandler(KSever sever, KSocket client) {
+    public ClientHandler(KServer sever, KSocket client) {
         this.sever = sever;
         this.client = client;
     }
