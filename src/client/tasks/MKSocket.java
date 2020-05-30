@@ -9,7 +9,7 @@ import java.net.Socket;
  * 对socket进行封装
  */
 public class MKSocket {
-    private final Socket socket;
+    public final Socket socket;
     private final DataInputStream reader;
     private final DataOutputStream writer;
     public static final int WRITE_READ_UTF_MAX_LENGTH = 65000;//65535

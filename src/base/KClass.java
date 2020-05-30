@@ -56,7 +56,7 @@ public class KClass {
 
     /**
      * 得到聊天记录文件路径
-     * @param id 用户id或者班级id
+     * @param id 用户id
      * @return
      */
     public static String getRecordPath(String id) {

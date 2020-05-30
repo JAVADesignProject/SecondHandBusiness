@@ -3,10 +3,7 @@ package client.frames;
 import base.json.CommentJson;
 import base.json.MessageJson;
 import base.json.ProductionJson;
-import client.components.Colors;
-import client.components.MKButton;
-import client.components.MKTextArea;
-import client.components.VerticalFlowLayout;
+import client.components.*;
 import client.listener.AbstractMouseListener;
 import client.tasks.MKChatClient;
 import client.tasks.MKPost;
@@ -20,11 +17,11 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class NormalProductionFrame extends JFrame {
+public class AuctionProductionFrame extends JFrame {
     private static final int WINDOW_WIDTH = 900;
     private static final int WINDOW_HEIGHT = 1150;
 
-    public static NormalProductionFrame context;
+    public static AuctionProductionFrame context;
     public ProductionJson production;
     public File picture;
     public List<CommentJson> comments;
@@ -33,6 +30,7 @@ public class NormalProductionFrame extends JFrame {
     private JPanel centerPanel;
     private JPanel namePanel;
     private JPanel posterPanel;
+    private JPanel auctionPanel;
     private JPanel commentsPanel;
     private JScrollPane scrollPane;
 
@@ -42,13 +40,14 @@ public class NormalProductionFrame extends JFrame {
     private JLabel priceLabel;
     private JLabel posterLabel;
     private JLabel commentLabel;
+    private MKTextField priceField;
     private MKTextArea commentArea;
     private MKButton buy;
     private MKButton addToCollection;
     private MKButton follow;
     private MKButton comment;
 
-    public NormalProductionFrame(ProductionJson production, File picture) {
+    public AuctionProductionFrame(ProductionJson production, File picture) {
         context = this;
         this.production = production;
         this.picture = picture;
@@ -84,8 +83,21 @@ public class NormalProductionFrame extends JFrame {
         introductionLabel = new JLabel(production.introduction);
         introductionLabel.setFont(FontUtil.getDefaultFont(22));
 
-        priceLabel = new JLabel("价格：" + production.price + " 元");
+        auctionPanel = new JPanel(new BorderLayout());
+        priceLabel = new JLabel("拍卖价：" + production.auction_max_price + " 元               ");
+        buy = new MKButton("出价", Colors.MAIN_COLOR,Colors.MAIN_COLOR_DARKER, Colors.MAIN_COLOR_DARKER);
+        buy.setFont(FontUtil.getDefaultFont(20));
+        buy.setPreferredSize(new Dimension(100, 35));
         priceLabel.setFont(FontUtil.getDefaultFont(22));
+        priceLabel.setBackground(Colors.WINDOW_BACKGROUND_LIGHT);
+        priceField = new MKTextField();
+        priceField.setBackground(Colors.FONT_WHITE);
+        priceField.setPlaceholder("输入你的出价");
+        priceField.setFont(FontUtil.getDefaultFont(18));
+        auctionPanel.setBackground(Colors.WINDOW_BACKGROUND_LIGHT);
+        auctionPanel.add(priceLabel, BorderLayout.WEST);
+        auctionPanel.add(priceField, BorderLayout.CENTER);
+        auctionPanel.add(buy, BorderLayout.EAST);
 
         posterPanel = new JPanel(new BorderLayout());
         posterLabel = new JLabel("<html>发布者：" + MKPost.getInstance().getUserInfo(production.producer_id).username
@@ -119,17 +131,10 @@ public class NormalProductionFrame extends JFrame {
         commentsPanel.setBackground(Colors.WINDOW_BACKGROUND_LIGHT);
         commentLabel.setFont(FontUtil.getDefaultFont(26));
         loadComment();
-
-        buy = new MKButton("买  ！", Colors.MAIN_COLOR,Colors.MAIN_COLOR_DARKER, Colors.MAIN_COLOR_DARKER);
-        buy.setFont(FontUtil.getDefaultFont(20));
-        buy.setPreferredSize(new Dimension(120, 35));
-        if (CurrentUser.userId.equals(production.producer_id)) {
-            buy.setVisible(false);
-        }
     }
 
     private void initView() {
-        setTitle("浏览普通商品");
+        setTitle("浏览拍卖商品");
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -146,13 +151,12 @@ public class NormalProductionFrame extends JFrame {
         centerPanel.add(namePanel);
         centerPanel.add(pictureLabel);
         centerPanel.add(introductionLabel);
-        centerPanel.add(priceLabel);
+        centerPanel.add(auctionPanel);
         centerPanel.add(posterPanel);
         centerPanel.add(commentArea);
         centerPanel.add(comment);
         centerPanel.add(commentLabel);
         centerPanel.add(commentsPanel);
-        centerPanel.add(buy);
 
         add(leftPanel, BorderLayout.WEST);
         add(scrollPane, BorderLayout.CENTER);
@@ -160,7 +164,6 @@ public class NormalProductionFrame extends JFrame {
 
     private void loadComment() {
         comments = MKPost.getInstance().getComment(production.production_id);
-        System.out.println("comments:" + comments);
         for (var i : comments) {
             JLabel comment = new JLabel("<html>" + MKPost.getInstance().getUserInfo(i.reviewer_id).username
                     + ": <br>" + i.text + "&nbsp<font style=\"color:gray; font-size:10px\">"
@@ -178,6 +181,7 @@ public class NormalProductionFrame extends JFrame {
             commentJson.text = commentArea.getText();
             commentJson.time = System.currentTimeMillis();
             MKPost.getInstance().addComment(commentJson);
+
         }
     }
 
@@ -186,9 +190,15 @@ public class NormalProductionFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                production.buyer_id = CurrentUser.userId;
-                MKPost.getInstance().buyNormalProduction(production);
-                buy.setEnabled(false);
+                if (priceField.getText() != null && !priceField.getText().isBlank() && !priceField.getText().isEmpty()
+                        && Integer.parseInt(priceField.getText()) > production.auction_max_price) {
+                    production.auction_max_price = Integer.parseInt(priceField.getText());
+                    production.max_price_user_id = CurrentUser.userId;
+                    MKPost.getInstance().buyAuctionProduction(production);
+                    priceField.setText("");
+                    priceLabel.setText("拍卖价：" + production.auction_max_price + " 元               ");
+                    priceLabel.updateUI();
+                }
             }
         });
 

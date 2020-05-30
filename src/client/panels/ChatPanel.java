@@ -36,9 +36,9 @@ public class ChatPanel extends JPanel implements MKListener {
     private final int chatBarHeight = 60;
 
     private JLabel chatTitle;
-    private JPanel chatPane;
+    private JPanel chatPanel;
     private JTextPane msgInput;
-    private JPanel centerPane;
+    private JPanel centerPanel;
     private JPanel groups;
     private JPanel chatTitleBar;
     private JPanel chatCard;
@@ -49,14 +49,6 @@ public class ChatPanel extends JPanel implements MKListener {
      public ChatPanel() {
         // 绘制基本框架
         initView();
-
-        // 获取有新消息的列表
-//        getNewChatBar();
-
-        // 读取本地聊天记录
-        //addOldChat();
-
-        //MKChatClient.getInstance().register(mainStatus.getToken());
         MKChatClient.getInstance().addMsgListener(this);
 
         //绘制聊天条
@@ -64,27 +56,21 @@ public class ChatPanel extends JPanel implements MKListener {
     }
 
     private void initView() {
-        //GShadowPane contentPane = new GShadowPane(5, 12);
-//        contentPane.setLayout(new BorderLayout());
-//        setContentPane(contentPane);
-
         setLayout(new BorderLayout());
         createChatPane();
-//        createChatCard();
         createGroupPane();
     }
 
     private void createChatPane() {
         //聊天区域面板
-        centerPane = new JPanel(new BorderLayout());
-        centerPane.setBackground(new Color(0xF2F3F4));
-        centerPane.setPreferredSize(new Dimension(paneWidth, paneHeight));
-        //centerPane.setBorder(new LineBorder(Color.GREEN));
+        centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setBackground(new Color(0xF2F3F4));
+        centerPanel.setPreferredSize(new Dimension(paneWidth, paneHeight));
 
         //标题栏
         chatTitleBar = new JPanel(new BorderLayout());
         chatTitleBar.setBackground(new Color(0xFDFEFE));
-        chatTitleBar.setPreferredSize(new Dimension(paneWidth, titleBarHeight));
+        chatTitleBar.setPreferredSize(new Dimension(paneWidth, titleBarHeight + 5));
         chatTitleBar.setBorder(BorderFactory.createCompoundBorder(chatTitleBar.getBorder(), BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(0xD0D3D4))));
 
         chatTitle = new JLabel("欢迎使用");
@@ -92,9 +78,8 @@ public class ChatPanel extends JPanel implements MKListener {
         chatTitle.setBorder(BorderFactory.createCompoundBorder(chatTitle.getBorder(), BorderFactory.createEmptyBorder(0, 25, 0, 0)));     // Margin
 
         chatTitleBar.add(chatTitle, BorderLayout.WEST);
-        centerPane.add(chatTitleBar, BorderLayout.NORTH);
-        //centerPane.add(cardPane, BorderLayout.CENTER);
-        add(centerPane, BorderLayout.CENTER);
+        centerPanel.add(chatTitleBar, BorderLayout.NORTH);
+        add(centerPanel, BorderLayout.CENTER);
     }
 
     private void addChatBubble(MKChatBubble bubble, String sender) {
@@ -108,26 +93,26 @@ public class ChatPanel extends JPanel implements MKListener {
         }
         panel.add(bubble);
         panel.setMaximumSize(new Dimension(Short.MAX_VALUE, panel.getPreferredSize().height));
-        chatPane.add(panel);
+        chatPanel.add(panel);
     }
 
     /**
      * 删除所有的气泡
      */
     private void removeChatBubble() {
-        chatPane.removeAll();
-        chatPane.revalidate();
-        chatPane.repaint();
+        chatPanel.removeAll();
+        chatPanel.revalidate();
+        chatPanel.repaint();
     }
 
     private void createChatCard() {
         chatCard = new JPanel(new BorderLayout());
         // 聊天区域
-        chatPane = new JPanel();
-        chatPane.setLayout(new BoxLayout(chatPane, BoxLayout.Y_AXIS));
-        chatPane.setBackground(new Color(0xFDFEFE));
+        chatPanel = new JPanel();
+        chatPanel.setLayout(new BoxLayout(chatPanel, BoxLayout.Y_AXIS));
+        chatPanel.setBackground(new Color(0xFDFEFE));
 
-        chatScrollPane = new JScrollPane(chatPane);
+        chatScrollPane = new JScrollPane(chatPanel);
         chatScrollPane.setBorder(null);
         chatScrollPane.setPreferredSize(new Dimension(paneWidth, chatHeight));
         chatScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -155,7 +140,6 @@ public class ChatPanel extends JPanel implements MKListener {
         msgScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         msgScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         msgScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(10, 0));
-        //toolBar.setBackground(new Color(0xFDFEFE));
         msgPane.add(msgScrollPane, BorderLayout.CENTER);
 
         // 发送按钮
@@ -173,7 +157,6 @@ public class ChatPanel extends JPanel implements MKListener {
         sendPane.add(send, BorderLayout.EAST);
         sendPane.setBorder(new EmptyBorder(8, 0, 8, 8));
         msgPane.add(sendPane, BorderLayout.SOUTH);
-
     }
 
     private void createGroupPane() {
@@ -208,7 +191,6 @@ public class ChatPanel extends JPanel implements MKListener {
         groupPane.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, new Color(0xD0D3D4)));
         groupPane.setPreferredSize(new Dimension(groupWidth, paneHeight));
         westPane.add(groupPane, BorderLayout.CENTER);
-
     }
 
     /**
@@ -221,37 +203,17 @@ public class ChatPanel extends JPanel implements MKListener {
             var chatBar = new ChatBar(i.userID, i.username, 0, 40, groupWidth, 70);
             chatBar.addActionListener(e-> {
                 createChatCard();
-                setChatPane(i);
+                setChatPanel(i);
                 chatBar.showCount(false);
                 CurrentUser.targetId = i.userID;
-                centerPane.add(chatCard);
                 reloadRecord(CurrentUser.userId, i.userID);
+                centerPanel.add(chatCard);
             });
             chatBars.add(chatBar);
             groups.add(chatBar.getPane());
             System.out.println("得到应该被加入到聊天栏中的聊天条" + i);
         }
         return null;
-    }
-
-    private void repaintChatBar() {
-        chatBars.sort((a, b) -> {
-            if (a.getType() == b.getType()) {
-                if (a.isShowCount() && b.isShowCount()) return 0;
-                else if (a.isShowCount()) return -1;
-                else return 1;
-            } else if (a.getType() > b.getType()) {
-                return -1;
-            } else {
-                return 1;
-            }
-        });
-        groups.removeAll();
-        for (var i : chatBars) {
-            groups.add(i.getPane());
-        }
-        groups.revalidate();
-        groups.repaint();
     }
 
     /**
@@ -304,29 +266,6 @@ public class ChatPanel extends JPanel implements MKListener {
         }
     }
 
-    private List<String> getRecord(String id) {
-        try {
-            var path = KClass.getRecordPath(CurrentUser.userId, id);
-            var file = new File(path);
-            if (!file.exists()) {
-                return new ArrayList<>();
-            }
-            var fin = new FileInputStream(file);
-            var reader = new BufferedReader(new InputStreamReader(fin));
-            var line = "";
-            List<String> lines = new ArrayList<>();
-            while ((line = reader.readLine()) != null)   {
-                lines.add(line);
-            }
-            reader.close();
-            fin.close();
-            return lines;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new ArrayList<>();
-    }
-
     // 重新加载消息记录
     private void reloadRecord(String sender, String receiver) {
         // 先获取最新的消息记录
@@ -334,18 +273,16 @@ public class ChatPanel extends JPanel implements MKListener {
         message.sender = sender;
         message.receiver = receiver;
         var list = MKPost.getInstance().getMessage(message);
-        System.out.println(list);
 
         // 将消息列表加入气泡
         removeChatBubble();
-        chatPane.repaint();
-
         addChatBubble(list, false);
-//        chatScrollPane.updateUI();
+        chatPanel.repaint();
+        chatPanel.updateUI();
     }
 
     // 设置聊天面板内容
-    private void setChatPane(UserJson userJson) {
+    private void setChatPanel(UserJson userJson) {
         if (CurrentUser.userId.equals(userJson.userID))
             return;
         chatTitle.setText(userJson.username);
@@ -353,7 +290,6 @@ public class ChatPanel extends JPanel implements MKListener {
         msg.sender = userJson.userID;
         msg.receiver = CurrentUser.userId;
         msg.type = 0;
-        //reloadRecord(msg);
     }
 
     // 发送信息
@@ -369,42 +305,9 @@ public class ChatPanel extends JPanel implements MKListener {
                 addChatBubble(createChatBubble(message), CurrentUser.userId);
                 MKChatClient.getInstance().sendMessage(message);
             } catch (Exception e) {
-                //new GMessageDialog(this, "消息发送失败（可能因为插入空图片等原因）", "Error");
                 e.printStackTrace();
             }
         }).start();
-    }
-
-    /**
-     * 获取旧聊天记录文件夹中的用户
-     * @return .
-     */
-    private List<String> getOldChatUser() {
-        List<String> files = new ArrayList<>();
-        File file = new File(KClass.getRecordPath(CurrentUser.userId));
-
-        File[] tempList = file.listFiles();
-        if (tempList == null) return null;
-        for (File aTempList : tempList) {
-            if (aTempList.isFile()) {
-                files.add(aTempList.getName());
-            }
-        }
-        return files;
-    }
-
-    /**
-     * 聊天记录加载到面板
-     */
-    private void addOldChat() {
-        var list = getOldChatUser();
-        if (list == null) return;
-        for(var u : list) {
-            var user = new UserJson();
-            user.userID = u;
-            user = MKPost.getInstance().getUserInfo(user);
-            if (user != null) addAndGetChatBar().showCount(false);
-        }
     }
 
     @Override
@@ -423,13 +326,12 @@ public class ChatPanel extends JPanel implements MKListener {
             // 当前正是和这条消息中的人聊天
             // 把消息添加到当前聊天窗口
             addChatBubble(list, true);
-            chatPane.revalidate();
-            Rectangle rect = new Rectangle(0,chatPane.getPreferredSize().height,10,10);
-            chatPane.scrollRectToVisible(rect);
+            chatPanel.revalidate();
+            Rectangle rect = new Rectangle(0, chatPanel.getPreferredSize().height,10,10);
+            chatPanel.scrollRectToVisible(rect);
         } else {
             // 添加新消息提示
             chatBar.showCount(true);
         }
     }
-
 }
