@@ -20,7 +20,7 @@ import java.util.List;
 public class MKPost {
     private int token = Integer.MAX_VALUE;
     private static MKPost instance;
-    private final MKSocket socket;
+    public final MKSocket socket;
 
     public static MKPost getInstance() {
         return instance;
@@ -105,16 +105,16 @@ public class MKPost {
         return Parser.fromJson(result.props, new TypeToken<List<ProductionJson>>(){}.getType());
     }
 
-    public synchronized  Message buyAuctionProduction(ProductionJson production){
-        return post (new Message(KClass.AUCTION_PRODUCTION_BUY, token, production.toString ()));
+    public synchronized  void buyAuctionProduction(ProductionJson production){
+        post (new Message(KClass.AUCTION_PRODUCTION_BUY, token, production.toString ()));
     }
 
     public synchronized Message getMyProduction(UserJson user){
         return post (new Message(KClass.MY_PRODUCTION, token, user.toString ()));
     }
 
-    public synchronized Message deleteProduction(ProductionJson production){
-        return post(new Message(KClass.DELETE_PRODUCTION, token, production.toString ()));
+    public synchronized void deleteProduction(ProductionJson production){
+        post(new Message(KClass.DELETE_PRODUCTION, token, production.toString ()));
     }
 
     public synchronized List<ProductionJson> getMySold(String userid){

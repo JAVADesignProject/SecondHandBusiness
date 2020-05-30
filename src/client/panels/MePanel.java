@@ -5,13 +5,16 @@ import client.components.MKButton;
 import client.components.VerticalFlowLayout;
 import client.frames.AboutFrame;
 import client.frames.ChangePasswordFrame;
+import client.frames.MyProductionFrame;
 import client.listener.AbstractMouseListener;
+import client.tasks.MKPost;
 import client.utils.CurrentUser;
 import client.utils.FontUtil;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 public class MePanel extends JPanel {
     private JPanel upPanel;
@@ -116,9 +119,29 @@ public class MePanel extends JPanel {
     }
 
     private void setListener() {
+        postLabel.addMouseListener(new AbstractMouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                MyProductionFrame f = new MyProductionFrame();
+            }
+        });
+
+        sellLabel.addMouseListener(new AbstractMouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+        });
+
         logoutButton.addMouseListener(new AbstractMouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                try {
+                    MKPost.getInstance().socket.closeALL();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                System.gc();
                 System.exit(0);
             }
         });

@@ -45,7 +45,7 @@ public class KProduction {
     //购买普通商品
     public static Message buyNormalProduction(ProductionJson json){
         try {
-            var  sql = "UPDATE production SET buyer_id=? WHERE id=?";
+            var  sql = "UPDATE production SET buyer_id = ?, bought = 1 WHERE id=?";
             var ps = Database.getInstance ().getConn ().prepareStatement (sql);
             ps.setString (1,json.buyer_id);
             ps.setInt (2,json.production_id);
@@ -65,7 +65,7 @@ public class KProduction {
             ps.setInt (1,json.auction_max_price);
             ps.setString (2,json.max_price_user_id);
             ps.setInt (3,json.production_id);
-            ps.executeUpdate ();
+            ps.executeUpdate();
             return new Message (0,0,"竞拍成功");
         } catch (SQLException e) {
             e.printStackTrace ( );
@@ -80,7 +80,6 @@ public class KProduction {
             var sql = "DELETE FROM production WHERE id=?";
             var ps = Database.getInstance ().getConn ().prepareStatement (sql);
             ps.setInt (1,proid);
-            ;
             ps.executeUpdate ();
             return new Message(0,0,"商品删除成功");
         } catch (SQLException e) {
