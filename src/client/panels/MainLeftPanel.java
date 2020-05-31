@@ -1,7 +1,7 @@
 package client.panels;
 
 import javax.swing.*;
-import client.components.Colors;
+import client.utils.Colors;
 import client.components.MKButton;
 import client.frames.MainFrame;
 import client.frames.PostFrame;

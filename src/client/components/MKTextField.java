@@ -1,5 +1,6 @@
 package client.components;
 
+import client.utils.Colors;
 import client.utils.FontUtil;
 
 import javax.swing.*;

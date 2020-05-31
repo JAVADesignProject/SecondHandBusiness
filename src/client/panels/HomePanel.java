@@ -1,7 +1,7 @@
 package client.panels;
 
 import base.json.ProductionJson;
-import client.components.Colors;
+import client.utils.Colors;
 import client.components.MKButton;
 import client.components.MKTextField;
 import client.frames.NormalProductionFrame;
@@ -13,7 +13,6 @@ import client.utils.ImageTools;
 
 import javax.imageio.stream.FileImageOutputStream;
 import javax.swing.*;
-import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.File;

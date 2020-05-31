@@ -2,7 +2,7 @@ package client.frames;
 
 import base.Parser;
 import base.json.UserJson;
-import client.components.Colors;
+import client.utils.Colors;
 import client.components.MKButton;
 import client.components.MKPasswordField;
 import client.components.VerticalFlowLayout;

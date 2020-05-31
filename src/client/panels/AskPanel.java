@@ -1,11 +1,10 @@
 package client.panels;
 
 import base.json.ProductionJson;
-import client.components.Colors;
+import client.utils.Colors;
 import client.components.MKButton;
 import client.components.MKTextField;
 import client.frames.AuctionProductionFrame;
-import client.frames.NormalProductionFrame;
 import client.listener.AbstractMouseListener;
 import client.tasks.MKPost;
 import client.utils.CurrentUser;

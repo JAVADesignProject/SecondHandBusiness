@@ -4,7 +4,7 @@ import base.KClass;
 import base.json.MessageJson;
 import base.json.UserJson;
 import client.components.ChatBar;
-import client.components.Colors;
+import client.utils.Colors;
 import client.components.MKButton;
 import client.components.MKChatBubble;
 import client.listener.MKListener;

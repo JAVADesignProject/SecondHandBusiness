@@ -3,7 +3,7 @@ package client.frames;
 import base.json.CommentJson;
 import base.json.MessageJson;
 import base.json.ProductionJson;
-import client.components.Colors;
+import client.utils.Colors;
 import client.components.MKButton;
 import client.components.MKTextArea;
 import client.components.VerticalFlowLayout;

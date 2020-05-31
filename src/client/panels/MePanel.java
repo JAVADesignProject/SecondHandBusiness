@@ -1,6 +1,6 @@
 package client.panels;
 
-import client.components.Colors;
+import client.utils.Colors;
 import client.components.MKButton;
 import client.components.VerticalFlowLayout;
 import client.frames.AboutFrame;

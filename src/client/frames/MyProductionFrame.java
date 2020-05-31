@@ -1,6 +1,6 @@
 package client.frames;
 
-import client.components.Colors;
+import client.utils.Colors;
 import client.components.MKButton;
 import client.components.VerticalFlowLayout;
 import client.listener.AbstractMouseListener;
@@ -11,7 +11,6 @@ import client.utils.FontUtil;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.sql.Blob;
 import java.text.SimpleDateFormat;
 
 public class MyProductionFrame extends JFrame {
