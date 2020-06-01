@@ -1,13 +1,5 @@
 create schema trade collate utf8_general_ci;
 
-create table test
-(
-	sender int null,
-	receiver int null,
-	id int auto_increment
-		primary key
-);
-
 create table user
 (
 	id varchar(16) not null comment '用户id同时也是学号'
@@ -81,4 +73,5 @@ create index buyer_id
 
 create index producer_id
 	on production (producer_id);
+
 

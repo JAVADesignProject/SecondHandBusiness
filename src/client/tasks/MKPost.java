@@ -1,6 +1,7 @@
 package client.tasks;
 
 import base.KClass;
+import base.KSocket;
 import base.Message;
 import base.Parser;
 import base.json.CommentJson;
@@ -20,7 +21,7 @@ import java.util.List;
 public class MKPost {
     private int token = Integer.MAX_VALUE;
     private static MKPost instance;
-    public final MKSocket socket;
+    public final KSocket socket;
 
     public static MKPost getInstance() {
         return instance;
@@ -28,7 +29,7 @@ public class MKPost {
 
     public MKPost() throws IOException {
         instance = this;
-        socket = new MKSocket(new Socket(KClass.HOST, KClass.INFO_PORT));
+        socket = new KSocket(new Socket(KClass.HOST, KClass.INFO_PORT));
     }
 
     private synchronized Message post(Message message) {
@@ -107,23 +108,5 @@ public class MKPost {
 
     public synchronized  void buyAuctionProduction(ProductionJson production){
         post (new Message(KClass.AUCTION_PRODUCTION_BUY, token, production.toString ()));
-    }
-
-    public synchronized Message getMyProduction(UserJson user){
-        return post (new Message(KClass.MY_PRODUCTION, token, user.toString ()));
-    }
-
-    public synchronized void deleteProduction(ProductionJson production){
-        post(new Message(KClass.DELETE_PRODUCTION, token, production.toString ()));
-    }
-
-    public synchronized List<ProductionJson> getMySold(String userid){
-        var result = post (new Message (KClass.MY_SOLD,token,userid));
-        return Parser.fromJson (result.props, new TypeToken<List<ProductionJson>> (){}.getType ());
-    }
-
-    public synchronized List<ProductionJson> getMyGot(String userid){
-        var result = post(new Message (KClass.MY_GOT, token, userid));
-        return Parser.fromJson (result.props,new TypeToken<List<ProductionJson>> (){}.getType ());
     }
 }

@@ -61,7 +61,6 @@ public class ChangePasswordFrame extends JDialog {
         confirmNewPasswordLabel.setFont(FontUtil.getDefaultFont(18));
         statusLabel.setFont(FontUtil.getDefaultFont(14));
         statusLabel.setForeground(Colors.RED);
-        //statusLabel.setVisible(false);
 
         setField(oldPasswordField);
         setField(newPasswordField);

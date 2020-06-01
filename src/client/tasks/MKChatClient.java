@@ -1,6 +1,7 @@
 package client.tasks;
 
 import base.KClass;
+import base.KSocket;
 import base.Message;
 import base.json.MessageJson;
 import client.listener.MKListener;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class MKChatClient {
     private static MKChatClient instance;
-    private MKSocket socket;
+    private KSocket socket;
     private int token = -12222;
     private List<MKListener> msgListener = new ArrayList<>();
 
@@ -39,17 +40,8 @@ public class MKChatClient {
 
     public MKChatClient() throws IOException {
         instance = this;
-        socket = new MKSocket(new Socket(KClass.HOST, KClass.CHAT_PORT));
+        socket = new KSocket(new Socket(KClass.HOST, KClass.CHAT_PORT));
         readThread.start();
-    }
-
-    public void register(int token) {
-        this.token = token;
-        try {
-            socket.writeUTF(new Message(2, token, "").toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public void sendMessage(MessageJson messageJson) {
@@ -59,5 +51,4 @@ public class MKChatClient {
             e.printStackTrace();
         }
     }
-
 }
